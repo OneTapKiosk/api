@@ -1,0 +1,32 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+
+jwt:
+  refresh:
+    secret: ${JWT_REFRESH_SECRET}
+    expiration: ${JWT_REFRESH_EXPIRATION}
+  access:
+    secret: ${JWT_ACCESS_SECRET}
+    expiration: ${JWT_ACCESS_EXPIRATION}
+
+springdoc:
+  swagger-ui:
+    path: /api
