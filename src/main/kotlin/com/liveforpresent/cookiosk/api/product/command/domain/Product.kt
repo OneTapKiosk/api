@@ -20,14 +20,14 @@ class Product private constructor(
     }
 
     fun validate() {
-        require(name.isNotBlank()) { "[Product] 상품명은 필수입니다." }
-        require(name.length < 32) { "[Product] 상품명은 최대 31자 입니다."}
+        require(props.name.isNotBlank()) { "[Product] 상품명은 필수입니다." }
+        require(props.name.length < 32) { "[Product] 상품명은 최대 31자 입니다."}
 
-        require(price.value >= 0) { "[Product] 상품 가격은 음수일 수 없습니다." }
+        require(props.price.value >= 0) { "[Product] 상품 가격은 음수일 수 없습니다." }
 
-        require(displayOrder >= 0) { "[Product] 상품 정렬 순서는 음수일 수 없습니다." }
+        require(props.displayOrder >= 0) { "[Product] 상품 정렬 순서는 음수일 수 없습니다." }
 
-        require((description?.length ?: 0) < 128) { "[Product] 상품 설명은 최대 127자 입니다." }
+        require((props.description?.length ?: 0) < 128) { "[Product] 상품 설명은 최대 127자 입니다." }
     }
 
     val productId: ProductId get() = id
