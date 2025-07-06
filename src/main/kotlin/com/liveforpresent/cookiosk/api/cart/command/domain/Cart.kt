@@ -7,7 +7,7 @@ import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import java.time.Instant
 
-class Cart(
+class Cart private constructor(
     id: CartId,
     private val props: CartProps
 ): AggregateRoot<CartId>(id) {
