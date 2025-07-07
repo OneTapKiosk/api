@@ -17,9 +17,9 @@ class OrderItem private constructor(
     }
 
     fun validate() {
-        require(props.name.isNotBlank()) { "[Product] 상품명은 필수입니다." }
-        require(props.name.length < 32) { "[Product] 상품명은 최대 31자 입니다." }
+        require(props.name.isNotBlank()) { "[OrderItem] 상품명은 필수입니다." }
+        require(props.name.length < 32) { "[OrderItem] 상품명은 최대 31자 입니다." }
 
-        require(props.price.value >= 0) { "[Product] 상품 가격은 음수일 수 없습니다." }
+        require(props.price.value >= 0) { "[OrderItem] 상품 가격은 음수일 수 없습니다." }
     }
 }
