@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.inventory.command.domain
 
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import java.time.Instant
@@ -63,4 +64,5 @@ class Inventory private constructor(
     val productId: ProductId get() = props.productId
     val createdAt: Instant get() = props.createdAt
     val updatedAt: Instant get() = props.updatedAt
+    val kioskId: KioskId get() = props.kioskId
 }

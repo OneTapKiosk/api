@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.inventory.command.domain
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import java.time.Instant
 
@@ -8,5 +9,6 @@ data class InventoryProps (
     val quantity: Int,
     val productId: ProductId,
     val createdAt: Instant,
-    val updatedAt: Instant
+    val updatedAt: Instant,
+    val kioskId: KioskId,
 )

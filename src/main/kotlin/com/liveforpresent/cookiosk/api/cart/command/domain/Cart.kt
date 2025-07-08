@@ -3,6 +3,7 @@ package com.liveforpresent.cookiosk.api.cart.command.domain
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartId
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import java.time.Instant
@@ -61,4 +62,5 @@ class Cart private constructor(
     val totalPrice: Money get() = props.totalPrice
     val createdAt: Instant get() = props.createdAt
     val updatedAt: Instant get() = props.updatedAt
+    val kioskId: KioskId get() = props.kioskId
 }

@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.order.command.domain
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
@@ -58,4 +59,5 @@ class Order private constructor(
     val totalPrice: Money get() = props.totalPrice
     val createdAt: Instant get() = props.createdAt
     val updatedAt: Instant get() = props.updatedAt
+    val kioskId: KioskId get() = props.kioskId
 }

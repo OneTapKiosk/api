@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.sale.command
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.sale.command.entity.SaleItem
 import com.liveforpresent.cookiosk.api.sale.command.vo.SaleId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
@@ -26,4 +27,5 @@ class Sale private constructor (
     val saleItems: MutableList<SaleItem> get() = props.saleItems
     val createdAt: Instant get() = props.createdAt
     val totalPrice: Money get() = props.totalPrice
+    val kioskId: KioskId get() = props.kioskId
 }
