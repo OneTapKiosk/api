@@ -1,0 +1,33 @@
+package com.liveforpresent.cookiosk.api.kiosk.command.domain
+
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.CompanyId
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskStatus
+import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
+
+class Kiosk private constructor(
+    id: KioskId,
+    private val props: KioskProps
+): AggregateRoot<KioskId>(id) {
+    companion object {
+        fun create(id:KioskId, props: KioskProps): Kiosk {
+            val kiosk = Kiosk(id, props)
+            kiosk.validate()
+
+            return kiosk
+        }
+    }
+
+    fun validate() {
+        require(props.name.isNotBlank()) { "[Kiosk] 이름은 필수 입니다." }
+        require(props.name.length < 32) { "[Kiosk] 이름은 최대 32자 입니다." }
+    }
+
+    val name: String get() = props.name
+    val location: String get() = props.location
+    val status: KioskStatus get() = props.status
+    val version: String get() = props.version
+    val devices: MutableSet<KioskDevice> get() = props.devices
+    val companyId: CompanyId get() = props.companyId
+}
