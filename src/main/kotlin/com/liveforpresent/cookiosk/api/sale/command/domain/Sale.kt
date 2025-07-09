@@ -1,8 +1,8 @@
-package com.liveforpresent.cookiosk.api.sale.command
+package com.liveforpresent.cookiosk.api.sale.command.domain
 
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
-import com.liveforpresent.cookiosk.api.sale.command.entity.SaleItem
-import com.liveforpresent.cookiosk.api.sale.command.vo.SaleId
+import com.liveforpresent.cookiosk.api.sale.command.domain.entity.SaleItem
+import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import java.time.Instant
