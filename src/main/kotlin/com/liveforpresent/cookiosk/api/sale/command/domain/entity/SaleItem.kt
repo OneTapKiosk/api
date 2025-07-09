@@ -1,6 +1,6 @@
-package com.liveforpresent.cookiosk.api.sale.command.entity
+package com.liveforpresent.cookiosk.api.sale.command.domain.entity
 
-import com.liveforpresent.cookiosk.api.sale.command.vo.SaleItemId
+import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleItemId
 import com.liveforpresent.cookiosk.shared.core.domain.BaseEntity
 
 class SaleItem(

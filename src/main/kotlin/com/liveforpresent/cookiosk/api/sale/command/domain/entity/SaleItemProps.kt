@@ -1,4 +1,4 @@
-package com.liveforpresent.cookiosk.api.sale.command.entity
+package com.liveforpresent.cookiosk.api.sale.command.domain.entity
 
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 
