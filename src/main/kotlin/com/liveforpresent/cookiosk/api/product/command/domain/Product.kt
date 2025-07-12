@@ -1,7 +1,7 @@
 package com.liveforpresent.cookiosk.api.product.command.domain
 
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
-import com.liveforpresent.cookiosk.api.product.command.domain.vo.ImageUrl
+import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot

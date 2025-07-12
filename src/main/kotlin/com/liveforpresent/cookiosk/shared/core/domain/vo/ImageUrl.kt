@@ -1,4 +1,4 @@
-package com.liveforpresent.cookiosk.api.product.command.domain.vo
+package com.liveforpresent.cookiosk.shared.core.domain.vo
 
 class ImageUrl private constructor(val value: String) {
     companion object {
