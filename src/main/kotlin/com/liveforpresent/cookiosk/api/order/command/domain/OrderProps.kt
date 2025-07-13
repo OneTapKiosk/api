@@ -7,7 +7,7 @@ import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import java.time.Instant
 
 data class OrderProps (
-    val orderItem: MutableSet<OrderItem>,
+    val orderItems: MutableSet<OrderItem>,
     val status: OrderStatus,
     val totalPrice: Money,
     val createdAt: Instant,

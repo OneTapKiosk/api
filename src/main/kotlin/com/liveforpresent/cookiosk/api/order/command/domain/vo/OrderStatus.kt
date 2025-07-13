@@ -31,4 +31,7 @@ class OrderStatus(val value: String) {
             else -> false
         }
     }
+
+    override fun equals(other: Any?): Boolean = other is OrderStatus && this.value == other.value
+    override fun hashCode(): Int = value.hashCode()
 }
