@@ -2,6 +2,7 @@ package com.liveforpresent.cookiosk.api.sale.command.domain.entity
 
 import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleItemId
 import com.liveforpresent.cookiosk.shared.core.domain.BaseEntity
+import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 
 class SaleItem(
     id: SaleItemId,
@@ -24,4 +25,8 @@ class SaleItem(
 
         require(props.quantity > 0) { "[SaleItem] 상품 개수는 0보다 커야 합니다." }
     }
+
+    val name: String get() = props.name
+    val price: Money get() = props.price
+    val quantity: Int get() = props.quantity
 }
