@@ -2,6 +2,7 @@ package com.liveforpresent.cookiosk.api.order.command.domain.entity
 
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
 import com.liveforpresent.cookiosk.shared.core.domain.BaseEntity
+import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 
 class OrderItem private constructor(
     id: OrderItemId,
@@ -22,4 +23,8 @@ class OrderItem private constructor(
 
         require(props.price.value >= 0) { "[OrderItem] 상품 가격은 음수일 수 없습니다." }
     }
+
+    val name: String get() = props.name
+    val price: Money get() = props.price
+    val quantity: Int get() = props.quantity
 }

@@ -19,4 +19,7 @@ class KioskDevice private constructor(val value: String) {
     fun validate() {
         require(allowedDevice.firstOrNull { it.value == value.uppercase() } != null) { "[KioskDevice] 유효하지 않은 키오스크 주변 장치입니다." }
     }
+
+    override fun equals(other: Any?): Boolean = other is KioskDevice && this.value == other.value
+    override fun hashCode(): Int = value.hashCode()
 }

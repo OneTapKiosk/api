@@ -19,4 +19,7 @@ class KioskStatus private constructor(val value: String) {
     fun validate() {
         require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) { "[KioskStatus] 유효하지 않은 키오스크 상태 입니다." }
     }
+
+    override fun equals(other: Any?): Boolean = other is KioskStatus && this.value == other.value
+    override fun hashCode(): Int = value.hashCode()
 }

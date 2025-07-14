@@ -54,7 +54,7 @@ class Order private constructor(
         ))
     }
 
-    val orderItems: MutableSet<OrderItem> get() = props.orderItem
+    val orderItems: MutableSet<OrderItem> get() = props.orderItems
     val orderStatus: OrderStatus get() = props.status
     val totalPrice: Money get() = props.totalPrice
     val createdAt: Instant get() = props.createdAt

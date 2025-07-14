@@ -1,0 +1,70 @@
+package com.liveforpresent.cookiosk.api.product.command.infrastructure
+
+import com.liveforpresent.cookiosk.api.product.command.domain.Product
+import com.liveforpresent.cookiosk.api.product.command.domain.ProductProps
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
+import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
+import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+
+@Entity
+@Table(name = "product")
+class ProductEntity(
+    @Id
+    @Column(nullable = false)
+    val id: Long,
+
+    @Column(nullable = false)
+    val name: String,
+
+    @Column(nullable = false)
+    val price: Int,
+
+    @Column(nullable = false)
+    val imageUrl: String,
+
+    @Column(nullable = false)
+    val displayOrder: Int,
+
+    @Column(nullable = false)
+    val barcode: String,
+
+    @Column(nullable = true)
+    val description: String?,
+
+    @Column(nullable = true)
+    val categoryId: String?,
+) {
+    companion object {
+        fun toPersistence(product: Product): ProductEntity {
+            return ProductEntity(
+                id = product.id.value,
+                name = product.name,
+                price = product.price.value,
+                imageUrl = product.imageUrl.value,
+                displayOrder = product.displayOrder,
+                barcode = product.barcode.value,
+                description = product.description,
+                categoryId = product.categoryId
+            )
+        }
+
+        fun toDomain(productEntity: ProductEntity): Product {
+            val props = ProductProps(
+                name = productEntity.name,
+                price = Money.create(productEntity.price),
+                imageUrl = ImageUrl.create(productEntity.imageUrl),
+                displayOrder = productEntity.displayOrder,
+                barcode = Barcode.create(productEntity.barcode),
+                description = productEntity.description,
+                categoryId = productEntity.categoryId
+            )
+
+            return Product.create(ProductId(productEntity.id), props)
+        }
+    }
+}
