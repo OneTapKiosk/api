@@ -11,5 +11,5 @@ data class ProductProps (
     val displayOrder: Int,
     val barcode: Barcode,
     val description: String?,
-    val categoryId: String?,
+    val categoryId: Long?,
 )

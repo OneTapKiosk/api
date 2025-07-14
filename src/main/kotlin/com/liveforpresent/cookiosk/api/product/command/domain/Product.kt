@@ -37,7 +37,7 @@ class Product private constructor(
         newDisplayOrder: Int = this.displayOrder,
         newBarcode: Barcode = this.barcode,
         newDescription: String? = this.description,
-        newCategoryId: String? = this.categoryId,
+        newCategoryId: Long? = this.categoryId,
     ): Product {
         val updatedProduct = Product(
             id, props.copy(
@@ -62,5 +62,5 @@ class Product private constructor(
     val displayOrder: Int get() = props.displayOrder
     val barcode: Barcode get() = props.barcode
     val description: String? get() = props.description
-    val categoryId: String? get() = props.categoryId
+    val categoryId: Long? get() = props.categoryId
 }

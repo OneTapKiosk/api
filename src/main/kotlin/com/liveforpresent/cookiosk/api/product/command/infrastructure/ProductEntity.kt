@@ -37,7 +37,7 @@ class ProductEntity(
     val description: String?,
 
     @Column(nullable = true)
-    val categoryId: String?,
+    val categoryId: Long?,
 ) {
     companion object {
         fun toPersistence(product: Product): ProductEntity {
