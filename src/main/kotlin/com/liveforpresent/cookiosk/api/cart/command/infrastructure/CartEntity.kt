@@ -1,4 +1,4 @@
-package com.liveforpresent.cookiosk.api.cart.command.infrastructure.entity
+package com.liveforpresent.cookiosk.api.cart.command.infrastructure
 
 import com.liveforpresent.cookiosk.api.cart.command.domain.Cart
 import com.liveforpresent.cookiosk.api.cart.command.domain.CartProps

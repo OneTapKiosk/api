@@ -6,8 +6,6 @@ import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItemProps
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartId
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
-import com.liveforpresent.cookiosk.api.cart.command.infrastructure.entity.CartEntity
-import com.liveforpresent.cookiosk.api.cart.command.infrastructure.entity.CartItemEntity
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
