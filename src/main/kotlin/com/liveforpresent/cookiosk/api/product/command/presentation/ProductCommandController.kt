@@ -1,8 +1,11 @@
 package com.liveforpresent.cookiosk.api.product.command.presentation
 
 import com.liveforpresent.cookiosk.api.product.command.application.command.CreateProductCommand
+import com.liveforpresent.cookiosk.api.product.command.application.command.UpdateProductCommand
 import com.liveforpresent.cookiosk.api.product.command.application.handler.CreateProductHandler
+import com.liveforpresent.cookiosk.api.product.command.application.handler.UpdateProductHandler
 import com.liveforpresent.cookiosk.api.product.command.presentation.dto.request.CreateProductReqDto
+import com.liveforpresent.cookiosk.api.product.command.presentation.dto.request.UpdateProductReqDto
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/product")
 class ProductCommandController(
     private val createProductHandler: CreateProductHandler,
+    private val updateProductHandler: UpdateProductHandler,
 ) {
     @PostMapping
     fun createProduct(@RequestBody createProductReqDto: CreateProductReqDto): ResponseEntity<BaseApiResponse<Unit>> {
@@ -36,8 +40,26 @@ class ProductCommandController(
     }
 
     @PatchMapping("/{productId}")
-    fun updateProduct(@PathVariable productId: String, @RequestBody updateProductReqDto: Any): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.CREATED)
+    fun updateProduct(@PathVariable productId: Long, @RequestBody updateProductReqDto: UpdateProductReqDto): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = UpdateProductCommand(
+            productId = productId,
+            name = updateProductReqDto.name,
+            price = updateProductReqDto.price,
+            imageUrl = updateProductReqDto.imageUrl,
+            displayOrder = updateProductReqDto.displayOrder,
+            barcode = updateProductReqDto.barcode,
+            description = updateProductReqDto.description,
+            categoryId = updateProductReqDto.categoryId
+        )
+
+        updateProductHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "상품 수정 성공"
+        )
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response)
     }
 
     @DeleteMapping("/{productId}")
