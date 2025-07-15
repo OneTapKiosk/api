@@ -5,6 +5,7 @@ import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
+import java.time.Instant
 
 class Product private constructor(
     id: ProductId,
@@ -30,7 +31,7 @@ class Product private constructor(
         require((props.description?.length ?: 0) < 128) { "[Product] 상품 설명은 최대 127자 입니다." }
     }
 
-    fun updateProduct(
+    fun update(
         newName: String = this.name,
         newPrice: Money = this.price,
         newImageUrl: ImageUrl = this.imageUrl,
@@ -55,6 +56,17 @@ class Product private constructor(
         return updatedProduct
     }
 
+    fun delete(id: ProductId): Product {
+        val updatedProduct = Product(
+            id, props.copy(
+                isDeleted = true,
+                deletedAt = Instant.now(),
+            )
+        )
+
+        return updatedProduct
+    }
+
     val productId: ProductId get() = id
     val name: String get() = props.name
     val price: Money get() = props.price
@@ -63,4 +75,6 @@ class Product private constructor(
     val barcode: Barcode get() = props.barcode
     val description: String? get() = props.description
     val categoryId: Long? get() = props.categoryId
+    val isDeleted: Boolean get() = props.isDeleted
+    val deletedAt: Instant? get() = props.deletedAt
 }

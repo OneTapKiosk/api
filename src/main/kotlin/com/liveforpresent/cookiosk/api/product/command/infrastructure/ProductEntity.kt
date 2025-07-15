@@ -10,6 +10,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.Instant
 
 @Entity
 @Table(name = "product")
@@ -38,6 +39,12 @@ class ProductEntity(
 
     @Column(nullable = true)
     val categoryId: Long?,
+
+    @Column(nullable = false)
+    val isDeleted: Boolean,
+
+    @Column(nullable = true)
+    val deletedAt: Instant?
 ) {
     companion object {
         fun toPersistence(product: Product): ProductEntity {
@@ -49,7 +56,9 @@ class ProductEntity(
                 displayOrder = product.displayOrder,
                 barcode = product.barcode.value,
                 description = product.description,
-                categoryId = product.categoryId
+                categoryId = product.categoryId,
+                isDeleted = product.isDeleted,
+                deletedAt = product.deletedAt,
             )
         }
 
@@ -61,7 +70,9 @@ class ProductEntity(
                 displayOrder = productEntity.displayOrder,
                 barcode = Barcode.create(productEntity.barcode),
                 description = productEntity.description,
-                categoryId = productEntity.categoryId
+                categoryId = productEntity.categoryId,
+                isDeleted = productEntity.isDeleted,
+                deletedAt = productEntity.deletedAt,
             )
 
             return Product.create(ProductId(productEntity.id), props)

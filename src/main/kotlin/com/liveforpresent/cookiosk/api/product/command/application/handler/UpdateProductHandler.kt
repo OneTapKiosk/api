@@ -14,7 +14,7 @@ class UpdateProductHandler(
     fun execute(command: UpdateProductCommand) {
         val product = productCommandRepository.findOne(command.productId)
 
-        val updatedProduct = product.updateProduct(
+        val updatedProduct = product.update(
             newName = command.name ?: product.name,
             newPrice = command.price?.let { Money.create(it) } ?: product.price,
             newImageUrl = command.imageUrl?. let { ImageUrl.create(it) } ?: product.imageUrl,

@@ -1,8 +1,10 @@
 package com.liveforpresent.cookiosk.api.product.command.presentation
 
 import com.liveforpresent.cookiosk.api.product.command.application.command.CreateProductCommand
+import com.liveforpresent.cookiosk.api.product.command.application.command.DeleteProductCommand
 import com.liveforpresent.cookiosk.api.product.command.application.command.UpdateProductCommand
 import com.liveforpresent.cookiosk.api.product.command.application.handler.CreateProductHandler
+import com.liveforpresent.cookiosk.api.product.command.application.handler.DeleteProductHandler
 import com.liveforpresent.cookiosk.api.product.command.application.handler.UpdateProductHandler
 import com.liveforpresent.cookiosk.api.product.command.presentation.dto.request.CreateProductReqDto
 import com.liveforpresent.cookiosk.api.product.command.presentation.dto.request.UpdateProductReqDto
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 class ProductCommandController(
     private val createProductHandler: CreateProductHandler,
     private val updateProductHandler: UpdateProductHandler,
+    private val deleteProductHandler: DeleteProductHandler,
 ) {
     @PostMapping
     fun createProduct(@RequestBody createProductReqDto: CreateProductReqDto): ResponseEntity<BaseApiResponse<Unit>> {
@@ -59,11 +62,20 @@ class ProductCommandController(
             message = "상품 수정 성공"
         )
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response)
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
     @DeleteMapping("/{productId}")
-    fun deleteProduct(@PathVariable productId: String): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.NO_CONTENT)
+    fun deleteProduct(@PathVariable productId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = DeleteProductCommand(productId)
+
+        deleteProductHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "상품 삭제 성공"
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }
