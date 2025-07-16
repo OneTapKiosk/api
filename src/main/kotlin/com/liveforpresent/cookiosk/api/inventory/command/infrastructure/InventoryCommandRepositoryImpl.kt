@@ -14,4 +14,10 @@ class InventoryCommandRepositoryImpl(
 
         return inventory
     }
+
+    override fun findOne(id: Long): Inventory {
+        val inventoryEntity = inventoryCommandJpaRepository.findById(id).orElseThrow()
+
+        return InventoryEntity.toDomain(inventoryEntity)
+    }
 }

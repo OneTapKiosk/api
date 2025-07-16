@@ -52,6 +52,7 @@ class Inventory private constructor(
         val updatedInventory = Inventory(id, props.copy(
             isAvailable = newIsAvailable,
             quantity = newQuantity,
+            productId = newProductId,
             updatedAt = Instant.now()
         ))
         updatedInventory.validate()
