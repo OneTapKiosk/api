@@ -5,6 +5,7 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskStatus
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
+import java.time.Instant
 
 class Kiosk private constructor(
     id: KioskId,
@@ -32,7 +33,7 @@ class Kiosk private constructor(
         newDevices: Set<KioskDevice> = this.devices,
         newCompanyId: CompanyId = this.companyId,
     ): Kiosk {
-        val updatedKiosk = Kiosk.create(
+        val updatedKiosk = create(
             id, props.copy(
                 name = newName,
                 location = newLocation,
@@ -48,10 +49,23 @@ class Kiosk private constructor(
         return updatedKiosk
     }
 
+    fun delete(id: KioskId): Kiosk {
+        val updatedKiosk = create(
+            id, props.copy(
+                isDeleted = true,
+                deletedAt = Instant.now(),
+            )
+        )
+
+        return updatedKiosk
+    }
+
     val name: String get() = props.name
     val location: String get() = props.location
     val status: KioskStatus get() = props.status
     val version: String get() = props.version
     val devices: MutableSet<KioskDevice> get() = props.devices
     val companyId: CompanyId get() = props.companyId
+    val isDeleted: Boolean get() = props.isDeleted
+    val deletedAt: Instant? get() = props.deletedAt
 }
