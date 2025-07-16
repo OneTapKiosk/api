@@ -14,4 +14,10 @@ class KioskCommandRepositoryImpl(
 
         return kiosk
     }
+
+    override fun findOne(id: Long): Kiosk {
+        val kioskEntity = kioskCommandJpaRepository.findById(id).orElseThrow()
+
+        return KioskEntity.toDomain(kioskEntity)
+    }
 }

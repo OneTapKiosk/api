@@ -8,10 +8,10 @@ import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 
 class Kiosk private constructor(
     id: KioskId,
-    private val props: KioskProps
-): AggregateRoot<KioskId>(id) {
+    private val props: KioskProps,
+) : AggregateRoot<KioskId>(id) {
     companion object {
-        fun create(id:KioskId, props: KioskProps): Kiosk {
+        fun create(id: KioskId, props: KioskProps): Kiosk {
             val kiosk = Kiosk(id, props)
             kiosk.validate()
 
@@ -22,6 +22,30 @@ class Kiosk private constructor(
     fun validate() {
         require(props.name.isNotBlank()) { "[Kiosk] 이름은 필수 입니다." }
         require(props.name.length < 32) { "[Kiosk] 이름은 최대 32자 입니다." }
+    }
+
+    fun update(
+        newName: String = this.name,
+        newLocation: String = this.location,
+        newStatus: KioskStatus = this.status,
+        newVersion: String = this.version,
+        newDevices: Set<KioskDevice> = this.devices,
+        newCompanyId: CompanyId = this.companyId,
+    ): Kiosk {
+        val updatedKiosk = Kiosk.create(
+            id, props.copy(
+                name = newName,
+                location = newLocation,
+                status = newStatus,
+                version = newVersion,
+                devices = newDevices.toMutableSet(),
+                companyId = newCompanyId,
+            )
+        )
+
+        updatedKiosk.validate()
+
+        return updatedKiosk
     }
 
     val name: String get() = props.name

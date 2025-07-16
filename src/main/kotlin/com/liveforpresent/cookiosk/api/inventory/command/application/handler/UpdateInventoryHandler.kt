@@ -17,7 +17,7 @@ class UpdateInventoryHandler(
         val updatedInventory = inventory.updateInventory(
             newIsAvailable = command.isAvailable ?: inventory.isAvailable,
             newQuantity = command.quantity ?: inventory.quantity,
-            newProductId = command.productId?.let { ProductId(command.productId) } ?: inventory.productId
+            newProductId = command.productId?.let { ProductId(it) } ?: inventory.productId
         )
 
         inventoryCommandRepository.save(updatedInventory)
