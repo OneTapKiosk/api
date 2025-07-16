@@ -25,7 +25,7 @@ class ProductCommandRepositoryImplTest: BehaviorSpec({
             displayOrder = 1,
             barcode = Barcode.create("1111111111111"),
             description = "a description",
-            categoryId = "categoryId",
+            categoryId = 1L,
         )
 
         val product = Product.create(productId, productProps)
@@ -39,6 +39,8 @@ class ProductCommandRepositoryImplTest: BehaviorSpec({
             barcode = product.barcode.value,
             description = product.description,
             categoryId = product.categoryId,
+            isDeleted = false,
+            deletedAt = null
         )
 
         val domainReturnedFromJpa = ProductEntity.toDomain(entityReturnedFromJpa)
