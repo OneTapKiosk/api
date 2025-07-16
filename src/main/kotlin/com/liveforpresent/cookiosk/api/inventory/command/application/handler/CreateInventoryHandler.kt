@@ -8,12 +8,14 @@ import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class CreateInventoryHandler(
     private val inventoryCommandRepository: InventoryCommandRepository
 ) {
+    @Transactional
     fun execute(command: CreateInventoryCommand) {
         val inventoryProps = InventoryProps(
             isAvailable = command.isAvailable,
