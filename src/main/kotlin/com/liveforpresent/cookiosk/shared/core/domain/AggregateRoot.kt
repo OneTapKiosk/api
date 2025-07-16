@@ -10,7 +10,7 @@ abstract class AggregateRoot<ID : Identifier<Long>>(id: ID): BaseEntity<ID>(id) 
         domainEvents.add(event)
     }
 
-    fun pullDomainEvents(): List<DomainEvent> {
+    fun clearDomainEvents(): List<DomainEvent> {
         val events = domainEvents.toList()
         domainEvents.clear()
         return events

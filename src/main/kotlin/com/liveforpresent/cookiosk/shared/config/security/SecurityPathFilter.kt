@@ -12,7 +12,8 @@ object SecurityPathFilter {
         "/v3/api-docs/**",
         "/swagger-ui/**",
         "/swagger-ui.html",
-        "/health/**"
+        "/health/**",
+        "/product/**"
     )
 
     fun isPublicPath(path: String): Boolean {
