@@ -5,12 +5,14 @@ import com.liveforpresent.cookiosk.api.product.command.domain.ProductCommandRepo
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class UpdateProductHandler(
     private val productCommandRepository: ProductCommandRepository
 ) {
+    @Transactional
     fun execute(command: UpdateProductCommand) {
         val product = productCommandRepository.findOne(command.productId)
 

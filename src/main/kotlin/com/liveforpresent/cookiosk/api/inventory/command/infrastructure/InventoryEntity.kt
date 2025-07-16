@@ -31,10 +31,16 @@ class InventoryEntity(
     val kioskId: Long,
 
     @Column(nullable = false)
+    val isDeleted: Boolean,
+
+    @Column(nullable = false)
     val createdAt: Instant,
 
     @Column(nullable = false)
-    val updatedAt: Instant
+    val updatedAt: Instant,
+
+    @Column(nullable = true)
+    val deletedAt: Instant?
 ) {
     companion object {
         fun toPersistence(inventory: Inventory): InventoryEntity {
@@ -44,8 +50,10 @@ class InventoryEntity(
                 quantity = inventory.quantity,
                 productId = inventory.productId.value,
                 kioskId = inventory.kioskId.value,
+                isDeleted = inventory.isDeleted,
                 createdAt = inventory.createdAt,
                 updatedAt = inventory.updatedAt,
+                deletedAt = inventory.deletedAt
             )
         }
 
@@ -55,8 +63,10 @@ class InventoryEntity(
                 quantity = inventoryEntity.quantity,
                 productId = ProductId(inventoryEntity.productId),
                 kioskId = KioskId(inventoryEntity.kioskId),
+                isDeleted = inventoryEntity.isDeleted,
                 createdAt = inventoryEntity.createdAt,
-                updatedAt = inventoryEntity.updatedAt
+                updatedAt = inventoryEntity.updatedAt,
+                deletedAt = inventoryEntity.deletedAt
             )
 
             return Inventory.create(InventoryId(inventoryEntity.id), props)
