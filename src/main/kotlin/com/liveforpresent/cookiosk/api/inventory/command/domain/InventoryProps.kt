@@ -11,4 +11,6 @@ data class InventoryProps (
     val createdAt: Instant,
     val updatedAt: Instant,
     val kioskId: KioskId,
+    val isDeleted: Boolean = false,
+    val deletedAt: Instant? = null,
 )

@@ -60,10 +60,21 @@ class Inventory private constructor(
         return updatedInventory
     }
 
+    fun delete(id: InventoryId): Inventory {
+        val updatedInventory = Inventory(id, props.copy(
+            isDeleted = true,
+            deletedAt = Instant.now()
+        ))
+
+        return updatedInventory
+    }
+
     val isAvailable: Boolean get() = props.isAvailable
     val quantity: Int get() = props.quantity
     val productId: ProductId get() = props.productId
+    val kioskId: KioskId get() = props.kioskId
+    val isDeleted: Boolean get() = props.isDeleted
     val createdAt: Instant get() = props.createdAt
     val updatedAt: Instant get() = props.updatedAt
-    val kioskId: KioskId get() = props.kioskId
+    val deletedAt: Instant? get() = props.deletedAt
 }
