@@ -7,6 +7,7 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskStatus
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 @Table(name = "kiosk")
@@ -34,6 +35,12 @@ class KioskEntity (
 
     @Column(nullable = false)
     val companyId: Long,
+
+    @Column(nullable = false)
+    val isDeleted: Boolean,
+
+    @Column(nullable = true)
+    val deletedAt: Instant?,
 ) {
     companion object {
         fun toPersistence(kiosk: Kiosk): KioskEntity {
@@ -44,7 +51,9 @@ class KioskEntity (
                 status = kiosk.status.value,
                 version = kiosk.version,
                 companyId = kiosk.companyId.value,
-                devices = kiosk.devices.map { kioskDevice -> kioskDevice.value }.toMutableSet()
+                devices = kiosk.devices.map { kioskDevice -> kioskDevice.value }.toMutableSet(),
+                isDeleted = kiosk.isDeleted,
+                deletedAt = kiosk.deletedAt
             )
         }
 
@@ -55,7 +64,9 @@ class KioskEntity (
                 status = KioskStatus.create(kioskEntity.status),
                 version = kioskEntity.version,
                 devices = kioskEntity.devices.map { device -> KioskDevice.create(device) }.toMutableSet(),
-                companyId = CompanyId(kioskEntity.companyId)
+                companyId = CompanyId(kioskEntity.companyId),
+                isDeleted = kioskEntity.isDeleted,
+                deletedAt = kioskEntity.deletedAt,
             )
 
             return Kiosk.create(KioskId(kioskEntity.id), props)
