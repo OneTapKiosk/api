@@ -1,6 +1,5 @@
 package com.liveforpresent.cookiosk.api.order.command.domain
 
-import com.liveforpresent.cookiosk.api.cart.command.domain.Cart
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
@@ -51,13 +50,24 @@ class Order private constructor(
         ))
     }
 
-    fun finishAsFail(status: OrderStatus): Order {
-        require(status == OrderStatus.REJECTED || status == OrderStatus.CANCELLED) {
-            "[Order] 주문에 실패 했습니다. (${props.status.value})"
+    fun finishAsReject(): Order {
+        require(props.status.canTransitionTo(OrderStatus.REJECTED)) {
+            "[Order] ${props.status.value} 상태에서는 주문 실패가 불가능합니다."
         }
 
         return Order(id, props.copy(
-            status = status,
+            status = OrderStatus.REJECTED,
+            updatedAt = Instant.now()
+        ))
+    }
+
+    fun finishAsCancel(): Order {
+        require(props.status.canTransitionTo(OrderStatus.CANCELLED)) {
+            "[Order] ${props.status.value} 상태에서는 주문 취소가 불가능합니다."
+        }
+
+        return Order(id, props.copy(
+            status = OrderStatus.CANCELLED,
             updatedAt = Instant.now()
         ))
     }

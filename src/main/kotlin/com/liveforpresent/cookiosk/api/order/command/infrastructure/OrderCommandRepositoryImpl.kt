@@ -14,4 +14,10 @@ class OrderCommandRepositoryImpl(
 
         return order
     }
+
+    override fun findOne(id: Long): Order {
+        val orderEntity = orderCommandJpaRepository.findById(id).orElseThrow()
+
+        return OrderEntity.toDomain(orderEntity)
+    }
 }

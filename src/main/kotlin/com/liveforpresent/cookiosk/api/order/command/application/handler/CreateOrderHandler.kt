@@ -1,4 +1,4 @@
-package com.liveforpresent.cookiosk.api.order.command.application.query
+package com.liveforpresent.cookiosk.api.order.command.application.handler
 
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.application.command.CreateOrderCommand

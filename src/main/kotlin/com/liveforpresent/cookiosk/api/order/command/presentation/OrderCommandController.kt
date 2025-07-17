@@ -1,7 +1,7 @@
 package com.liveforpresent.cookiosk.api.order.command.presentation
 
-import com.liveforpresent.cookiosk.api.order.command.application.command.CreateOrderCommand
-import com.liveforpresent.cookiosk.api.order.command.application.query.CreateOrderHandler
+import com.liveforpresent.cookiosk.api.order.command.application.command.UpdateOrderStatusCommand
+import com.liveforpresent.cookiosk.api.order.command.application.handler.*
 import com.liveforpresent.cookiosk.api.order.command.presentation.dto.request.CreateOrderReqDto
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/order")
 class OrderCommandController(
-    private val createOrderHandler: CreateOrderHandler
+    private val createOrderHandler: CreateOrderHandler,
+    private val finishOrderAsSuccessHandler: FinishOrderAsSuccessHandler,
+    private val finishOrderAsRejectHandler: FinishOrderAsRejectHandler,
+    private val finishOrderAsCancelHandler: FinishOrderAsCancelHandler,
+    private val processPaymentHandler: ProcessPaymentHandler
 ) {
     @PostMapping
     fun createOrder(@RequestBody reqDto: CreateOrderReqDto): ResponseEntity<BaseApiResponse<Unit>> {
@@ -26,8 +30,60 @@ class OrderCommandController(
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
-    @PatchMapping("/{orderId}")
-    fun updateOrderStatus(@PathVariable orderId: String, @RequestBody updateOrderStatusReqDto: Any): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.OK)
+    @PatchMapping("/{orderId}/process-payment")
+    fun processPayment(@PathVariable orderId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = UpdateOrderStatusCommand(orderId)
+
+        processPaymentHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "결제 진행"
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
+
+    @PatchMapping("/{orderId}/success")
+    fun finishOrderAsSuccess(@PathVariable orderId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = UpdateOrderStatusCommand(orderId)
+
+        finishOrderAsSuccessHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "주문 성공"
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
+
+    @PatchMapping("/{orderId}/reject")
+    fun finishOrderAsReject(@PathVariable orderId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = UpdateOrderStatusCommand(orderId)
+
+        finishOrderAsRejectHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "주문 실패"
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
+
+
+    @PatchMapping("/{orderId}/cancel")
+    fun finishOrderAsCancel(@PathVariable orderId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = UpdateOrderStatusCommand(orderId)
+
+        finishOrderAsCancelHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "주문 취소"
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }
