@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.order.command.domain
 
+import com.liveforpresent.cookiosk.api.cart.command.domain.Cart
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
@@ -14,7 +15,8 @@ class Order private constructor(
 ): AggregateRoot<OrderId>(id) {
     companion object {
         fun create(id: OrderId, props: OrderProps): Order {
-            val order = Order(id, props)
+            val temp = Order(id, props)
+            val order = temp.calculateTotalPrice()
             order.validate()
 
             return order
@@ -22,6 +24,12 @@ class Order private constructor(
     }
 
     fun validate() {}
+
+    private fun calculateTotalPrice(): Order {
+        return Order(id, props.copy(totalPrice = props.orderItems
+            .sumOf { it.price.times(it.quantity).value }
+            .let { Money.create(it) }))
+    }
 
     fun processPayment(): Order {
         require(props.status.canTransitionTo(OrderStatus.PENDING)) { "[Order] ${props.status.value} 상태에서는 결제 단계로 넘어갈 수 없습니다." }
