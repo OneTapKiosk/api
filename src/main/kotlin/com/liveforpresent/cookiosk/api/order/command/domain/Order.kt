@@ -14,7 +14,8 @@ class Order private constructor(
 ): AggregateRoot<OrderId>(id) {
     companion object {
         fun create(id: OrderId, props: OrderProps): Order {
-            val order = Order(id, props)
+            val temp = Order(id, props)
+            val order = temp.calculateTotalPrice()
             order.validate()
 
             return order
@@ -22,6 +23,12 @@ class Order private constructor(
     }
 
     fun validate() {}
+
+    private fun calculateTotalPrice(): Order {
+        return Order(id, props.copy(totalPrice = props.orderItems
+            .sumOf { it.price.times(it.quantity).value }
+            .let { Money.create(it) }))
+    }
 
     fun processPayment(): Order {
         require(props.status.canTransitionTo(OrderStatus.PENDING)) { "[Order] ${props.status.value} 상태에서는 결제 단계로 넘어갈 수 없습니다." }
@@ -43,13 +50,24 @@ class Order private constructor(
         ))
     }
 
-    fun finishAsFail(status: OrderStatus): Order {
-        require(status == OrderStatus.REJECTED || status == OrderStatus.CANCELLED) {
-            "[Order] 주문에 실패 했습니다. (${props.status.value})"
+    fun finishAsReject(): Order {
+        require(props.status.canTransitionTo(OrderStatus.REJECTED)) {
+            "[Order] ${props.status.value} 상태에서는 주문 실패가 불가능합니다."
         }
 
         return Order(id, props.copy(
-            status = status,
+            status = OrderStatus.REJECTED,
+            updatedAt = Instant.now()
+        ))
+    }
+
+    fun finishAsCancel(): Order {
+        require(props.status.canTransitionTo(OrderStatus.CANCELLED)) {
+            "[Order] ${props.status.value} 상태에서는 주문 취소가 불가능합니다."
+        }
+
+        return Order(id, props.copy(
+            status = OrderStatus.CANCELLED,
             updatedAt = Instant.now()
         ))
     }
