@@ -1,10 +1,11 @@
 package com.liveforpresent.cookiosk.api.order.query.presentation
 
 import com.liveforpresent.cookiosk.api.order.query.application.handler.GetOrderByIdHandler
+import com.liveforpresent.cookiosk.api.order.query.application.handler.GetOrderListByCriteriaHandler
 import com.liveforpresent.cookiosk.api.order.query.application.query.GetOrderByIdQuery
+import com.liveforpresent.cookiosk.api.order.query.application.query.GetOrderListByCriteriaQuery
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderDetailModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderModel
-import com.liveforpresent.cookiosk.api.order.query.domain.OrderQueryRepository
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +19,8 @@ import java.time.Instant
 @RestController
 @RequestMapping("/order")
 class OrderQueryController(
-    private val getOrderByIdHandler: GetOrderByIdHandler,
+    private val getOrderListByCriteriaHandler: GetOrderListByCriteriaHandler,
+    private val getOrderByIdHandler: GetOrderByIdHandler
 ) {
     @GetMapping
     fun getOrderList(
@@ -27,16 +29,20 @@ class OrderQueryController(
         @RequestParam(required = false) statuses: List<String>?,
         @RequestParam(required = false) sortBy: String?,
     ): ResponseEntity<BaseApiResponse<List<OrderModel>>> {
-        /*
-        val result = orderQueryRepository.findByCriteria(startAt, endAt, statuses, sortBy)
+        val query = GetOrderListByCriteriaQuery(
+            startAt = startAt,
+            endAt = endAt,
+            statuses = statuses,
+            sortBy = sortBy,
+        )
+        val result = getOrderListByCriteriaHandler.execute(query)
 
         val response = BaseApiResponse<List<OrderModel>>(
             success = true,
             message = "주문 목록 조회 성공",
             data = result
         )
-*/
-        return ResponseEntity(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
     @GetMapping("{orderId}")
