@@ -1,5 +1,11 @@
 package com.liveforpresent.cookiosk.api.order.query.presentation
 
+import com.liveforpresent.cookiosk.api.order.query.application.handler.GetOrderByIdHandler
+import com.liveforpresent.cookiosk.api.order.query.application.handler.GetOrderListByCriteriaHandler
+import com.liveforpresent.cookiosk.api.order.query.application.query.GetOrderByIdQuery
+import com.liveforpresent.cookiosk.api.order.query.application.query.GetOrderListByCriteriaQuery
+import com.liveforpresent.cookiosk.api.order.query.domain.OrderDetailModel
+import com.liveforpresent.cookiosk.api.order.query.domain.OrderModel
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -8,22 +14,48 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.Instant
 
 @RestController
 @RequestMapping("/order")
-class OrderQueryController {
+class OrderQueryController(
+    private val getOrderListByCriteriaHandler: GetOrderListByCriteriaHandler,
+    private val getOrderByIdHandler: GetOrderByIdHandler
+) {
     @GetMapping
     fun getOrderList(
-        @RequestParam(required = false) orderStatus: List<String>?,
-        @RequestParam(required = false) sort: String?,
-        @RequestParam(required = false) startDate: String?,     // yyyy-mm-dd
-        @RequestParam(required = false) endDate: String?,       // yyyy-mm-dd
-    ): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.OK)
+        @RequestParam(required = false) startAt: Instant?,
+        @RequestParam(required = false) endAt: Instant?,
+        @RequestParam(required = false) statuses: List<String>?,
+        @RequestParam(required = false) sortBy: String?,
+    ): ResponseEntity<BaseApiResponse<List<OrderModel>>> {
+        val query = GetOrderListByCriteriaQuery(
+            startAt = startAt,
+            endAt = endAt,
+            statuses = statuses,
+            sortBy = sortBy,
+        )
+        val result = getOrderListByCriteriaHandler.execute(query)
+
+        val response = BaseApiResponse<List<OrderModel>>(
+            success = true,
+            message = "주문 목록 조회 성공",
+            data = result
+        )
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
     @GetMapping("{orderId}")
-    fun getOrderDetail(@PathVariable("orderId") orderId: String): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.OK)
+    fun getOrderDetail(@PathVariable("orderId") orderId: Long): ResponseEntity<BaseApiResponse<OrderDetailModel>> {
+        val query = GetOrderByIdQuery(orderId)
+        val result = getOrderByIdHandler.execute(query)
+
+        val response = BaseApiResponse<OrderDetailModel>(
+            success = true,
+            message = "주문 상세 정보 조회 성공",
+            data = result
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }
