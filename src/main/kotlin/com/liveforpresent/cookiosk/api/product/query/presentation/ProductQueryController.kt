@@ -1,7 +1,9 @@
 package com.liveforpresent.cookiosk.api.product.query.presentation
 
+import com.liveforpresent.cookiosk.api.product.query.application.handler.GetProductByBarcodeHandler
 import com.liveforpresent.cookiosk.api.product.query.application.handler.GetProductByIdHandler
 import com.liveforpresent.cookiosk.api.product.query.application.handler.GetProductByNameHandler
+import com.liveforpresent.cookiosk.api.product.query.application.query.GetProductByBarcodeQuery
 import com.liveforpresent.cookiosk.api.product.query.application.query.GetProductByIdQuery
 import com.liveforpresent.cookiosk.api.product.query.application.query.GetProductByNameQuery
 import com.liveforpresent.cookiosk.api.product.query.domain.ProductModel
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/product")
 class ProductQueryController(
     private val getProductByIdHandler: GetProductByIdHandler,
-    private val getProductByNameHandler: GetProductByNameHandler
+    private val getProductByNameHandler: GetProductByNameHandler,
+    private val getProductByBarcodeHandler: GetProductByBarcodeHandler
 ) {
     @GetMapping
     fun getProductList(
@@ -50,6 +53,20 @@ class ProductQueryController(
     fun getProductByName(@PathVariable productName: String): ResponseEntity<BaseApiResponse<ProductModel>> {
         val query = GetProductByNameQuery(productName)
         val result = getProductByNameHandler.execute(query)
+
+        val response = BaseApiResponse<ProductModel>(
+            success = true,
+            message = "상품 조회 성공",
+            data = result
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
+
+    @GetMapping("/by-barcode/{productBarcode}")
+    fun getProductByBarcode(@PathVariable productBarcode: String): ResponseEntity<BaseApiResponse<ProductModel>> {
+        val query = GetProductByBarcodeQuery(productBarcode)
+        val result = getProductByBarcodeHandler.execute(query)
 
         val response = BaseApiResponse<ProductModel>(
             success = true,
