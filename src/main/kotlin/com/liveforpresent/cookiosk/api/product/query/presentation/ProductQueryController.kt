@@ -1,5 +1,8 @@
 package com.liveforpresent.cookiosk.api.product.query.presentation
 
+import com.liveforpresent.cookiosk.api.product.query.application.handler.GetProductByIdHandler
+import com.liveforpresent.cookiosk.api.product.query.application.query.GetProductByIdQuery
+import com.liveforpresent.cookiosk.api.product.query.domain.ProductModel
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,19 +14,32 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/product")
-class ProductQueryController {
+class ProductQueryController(
+    private val getProductByIdHandler: GetProductByIdHandler
+) {
     @GetMapping
     fun getProductList(
         @RequestParam(required = false) category: String?,
         @RequestParam(required = false) name: String?,
-        @RequestParam(required = false) sort: String?,
+        @RequestParam(required = false) minPrice: Int?,
+        @RequestParam(required = false) maxPrice: Int?,
+        @RequestParam(required = false) sortBy: String?,
         @RequestParam(required = false) inStock: Boolean?
     ): ResponseEntity<BaseApiResponse<Unit>> {
         return ResponseEntity(HttpStatus.OK)
     }
 
     @GetMapping("/{productId}")
-    fun getProduct(@PathVariable productId: String): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.OK)
+    fun getProductById(@PathVariable productId: Long): ResponseEntity<BaseApiResponse<ProductModel>> {
+        val query = GetProductByIdQuery(productId)
+        val result = getProductByIdHandler.execute(query)
+
+        val response = BaseApiResponse<ProductModel>(
+            success = true,
+            message = "상품 조회 성공",
+            data = result
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }
