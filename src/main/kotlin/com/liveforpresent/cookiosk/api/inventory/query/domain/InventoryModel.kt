@@ -7,8 +7,6 @@ data class InventoryModel(
     val isAvailable: Boolean,
     val quantity: Int,
     val productId: Long,
-    val description: String,
-    val categoryId: Long,
     val createdAt: Instant,
     val updatedAt: Instant,
 )
