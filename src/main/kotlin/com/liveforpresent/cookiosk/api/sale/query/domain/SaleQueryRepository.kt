@@ -9,4 +9,10 @@ interface SaleQueryRepository {
         sortBy: String?,
         kioskId: Long
     ): List<SaleModel>
+
+    fun findSummaryByItem(
+        startAt: Instant?,
+        endAt: Instant?,
+        kioskId: Long
+    ): List<SaleByItemModel>
 }

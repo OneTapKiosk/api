@@ -1,7 +1,10 @@
 package com.liveforpresent.cookiosk.api.sale.query.presentation
 
 import com.liveforpresent.cookiosk.api.sale.query.application.handler.GetSaleByCriteriaHandler
+import com.liveforpresent.cookiosk.api.sale.query.application.handler.GetSaleSummaryByItemHandler
 import com.liveforpresent.cookiosk.api.sale.query.application.query.GetSaleByCriteriaQuery
+import com.liveforpresent.cookiosk.api.sale.query.application.query.GetSaleSummaryByItemQuery
+import com.liveforpresent.cookiosk.api.sale.query.domain.SaleByItemModel
 import com.liveforpresent.cookiosk.api.sale.query.domain.SaleModel
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
@@ -15,7 +18,8 @@ import java.time.Instant
 @RestController
 @RequestMapping("/sale")
 class SaleQueryController(
-    private val getSaleByCriteriaHandler: GetSaleByCriteriaHandler
+    private val getSaleByCriteriaHandler: GetSaleByCriteriaHandler,
+    private val getSaleSummaryByItemHandler: GetSaleSummaryByItemHandler,
 ) {
     @GetMapping
     fun getSaleByCriteria(
@@ -38,11 +42,20 @@ class SaleQueryController(
 
     @GetMapping("/product-summary")
     fun getSaleProductSummary(
-        @RequestParam(required = false) startDate: String?,
-        @RequestParam(required = false) endDate: String?,
-        @RequestParam(required = false) sort: String?,
+        @RequestParam(required = false) startAt: Instant?,
+        @RequestParam(required = false) endAt: Instant?,
+        @RequestParam(required = false) sortBy: String?,
         @RequestParam(required = false) kioskId: Long,
-    ): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.OK)
+    ): ResponseEntity<BaseApiResponse<List<SaleByItemModel>>> {
+        val query = GetSaleSummaryByItemQuery(startAt, endAt, kioskId)
+        val result = getSaleSummaryByItemHandler.execute(query)
+
+        val response = BaseApiResponse<List<SaleByItemModel>>(
+            success = true,
+            message = "품목별 매출 조회 성공",
+            data = result
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }

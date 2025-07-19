@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.sale.query.infrastructure
 
+import com.liveforpresent.cookiosk.api.sale.query.domain.SaleByItemModel
 import com.liveforpresent.cookiosk.api.sale.query.domain.SaleModel
 import com.liveforpresent.cookiosk.api.sale.query.domain.SaleQueryRepository
 import org.springframework.stereotype.Repository
@@ -16,5 +17,9 @@ class SaleQueryRepositoryImpl(
         kioskId: Long
     ): List<SaleModel> {
         return saleQueryJpaRepository.findByCriteria(startAt, endAt, sortBy, kioskId)
+    }
+
+    override fun findSummaryByItem(startAt: Instant?, endAt: Instant?, kioskId: Long): List<SaleByItemModel> {
+        return saleQueryJpaRepository.findSummaryByItem(startAt, endAt, kioskId)
     }
 }
