@@ -17,7 +17,8 @@ object SecurityPathFilter {
         "/inventory/**",
         "/kiosk/**",
         "/order/**",
-        "/sale/**"
+        "/sale/**",
+        "/cart/**"
     )
 
     fun isPublicPath(path: String): Boolean {
