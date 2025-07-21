@@ -2,12 +2,14 @@ package com.liveforpresent.cookiosk.api.order.command.application.handler
 
 import com.liveforpresent.cookiosk.api.order.command.application.command.UpdateOrderStatusCommand
 import com.liveforpresent.cookiosk.api.order.command.domain.OrderCommandRepository
-import jakarta.transaction.Transactional
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FinishOrderAsSuccessHandler(
     private val orderCommandRepository: OrderCommandRepository,
+    private val domainEventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: UpdateOrderStatusCommand) {
@@ -16,5 +18,7 @@ class FinishOrderAsSuccessHandler(
         val updatedOrder = order.finishAsSuccess()
 
         orderCommandRepository.save(updatedOrder)
+
+        domainEventPublisher.publish(updatedOrder)
     }
 }
