@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.product.command.domain
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
@@ -39,6 +40,7 @@ class Product private constructor(
         newBarcode: Barcode = this.barcode,
         newDescription: String? = this.description,
         newCategoryId: Long? = this.categoryId,
+        newKioskId: KioskId = this.kioskId,
     ): Product {
         val updatedProduct = Product(
             id, props.copy(
@@ -49,6 +51,7 @@ class Product private constructor(
                 barcode = newBarcode,
                 description = newDescription,
                 categoryId = newCategoryId,
+                kioskId = newKioskId,
             )
         )
         updatedProduct.validate()
@@ -75,6 +78,7 @@ class Product private constructor(
     val barcode: Barcode get() = props.barcode
     val description: String? get() = props.description
     val categoryId: Long? get() = props.categoryId
+    val kioskId: KioskId get() = props.kioskId
     val isDeleted: Boolean get() = props.isDeleted
     val deletedAt: Instant? get() = props.deletedAt
 }

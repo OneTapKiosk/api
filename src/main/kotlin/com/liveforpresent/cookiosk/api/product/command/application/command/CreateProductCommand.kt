@@ -8,4 +8,5 @@ data class CreateProductCommand (
     val barcode: String,
     val description: String?,
     val categoryId: Long?,
+    val kioskId: Long
 )
