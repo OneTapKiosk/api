@@ -1,10 +1,9 @@
 package com.liveforpresent.cookiosk.api.product.command.domain.event
 
-import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
-import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
+import com.liveforpresent.cookiosk.shared.core.domain.vo.DomainEvent
 
 data class ProductCreatedEvent(
-    val productId: ProductId,
+    val productId: Long,
     val quantity: Int,
-    val kioskId: KioskId
-)
+    val kioskId: Long
+): DomainEvent
