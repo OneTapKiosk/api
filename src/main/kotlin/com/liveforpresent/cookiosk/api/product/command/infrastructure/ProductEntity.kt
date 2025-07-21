@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.product.command.infrastructure
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.Product
 import com.liveforpresent.cookiosk.api.product.command.domain.ProductProps
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
@@ -41,6 +42,9 @@ class ProductEntity(
     val categoryId: Long?,
 
     @Column(nullable = false)
+    val kioskId: Long,
+
+    @Column(nullable = false)
     val isDeleted: Boolean,
 
     @Column(nullable = true)
@@ -57,6 +61,7 @@ class ProductEntity(
                 barcode = product.barcode.value,
                 description = product.description,
                 categoryId = product.categoryId,
+                kioskId = product.kioskId.value,
                 isDeleted = product.isDeleted,
                 deletedAt = product.deletedAt,
             )
@@ -71,6 +76,7 @@ class ProductEntity(
                 barcode = Barcode.create(productEntity.barcode),
                 description = productEntity.description,
                 categoryId = productEntity.categoryId,
+                kioskId = KioskId(productEntity.kioskId),
                 isDeleted = productEntity.isDeleted,
                 deletedAt = productEntity.deletedAt,
             )

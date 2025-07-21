@@ -29,7 +29,8 @@ class ProductCommandController(
             displayOrder = createProductReqDto.displayOrder,
             barcode = createProductReqDto.barcode,
             description = createProductReqDto.description,
-            categoryId = createProductReqDto.categoryId
+            categoryId = createProductReqDto.categoryId,
+            kioskId = createProductReqDto.kioskId
         )
 
         createProductHandler.execute(command)
@@ -52,7 +53,7 @@ class ProductCommandController(
             displayOrder = updateProductReqDto.displayOrder,
             barcode = updateProductReqDto.barcode,
             description = updateProductReqDto.description,
-            categoryId = updateProductReqDto.categoryId
+            categoryId = updateProductReqDto.categoryId,
         )
 
         updateProductHandler.execute(command)
