@@ -39,6 +39,6 @@ class CreateProductHandler(
 
         productCommandRepository.save(product)
 
-        eventPublisher.publishEvent(ProductCreatedEvent(productId, quantity = 0))
+        eventPublisher.publishEvent(ProductCreatedEvent(productId, quantity = 0, kioskId = productProps.kioskId))
     }
 }
