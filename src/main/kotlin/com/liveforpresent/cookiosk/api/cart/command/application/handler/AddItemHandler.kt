@@ -1,6 +1,6 @@
 package com.liveforpresent.cookiosk.api.cart.command.application.handler
 
-import com.liveforpresent.cookiosk.api.cart.command.application.command.CartItemCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.command.AddCartItemCommand
 import com.liveforpresent.cookiosk.api.cart.command.domain.CartCommandRepository
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItemProps
@@ -19,7 +19,7 @@ class AddItemHandler(
     private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
-    fun execute(command: CartItemCommand) {
+    fun execute(command: AddCartItemCommand) {
         val cart = cartCommandRepository.findById(command.cartId)
 
         val cartItem = CartItem.create(

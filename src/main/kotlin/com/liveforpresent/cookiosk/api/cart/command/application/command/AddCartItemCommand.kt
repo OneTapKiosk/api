@@ -1,6 +1,6 @@
 package com.liveforpresent.cookiosk.api.cart.command.application.command
 
-data class CartItemCommand(
+data class AddCartItemCommand(
     val cartId: Long,
     val name: String,
     val price: Int,
