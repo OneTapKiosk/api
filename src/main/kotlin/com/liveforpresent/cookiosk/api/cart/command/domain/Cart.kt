@@ -2,7 +2,9 @@ package com.liveforpresent.cookiosk.api.cart.command.domain
 
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
 import com.liveforpresent.cookiosk.api.cart.command.domain.event.CartItemAddedEvent
+import com.liveforpresent.cookiosk.api.cart.command.domain.event.CartItemRemovedEvent
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartId
+import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
@@ -35,29 +37,34 @@ class Cart private constructor(
             props.cartItems.add(updatedItem)
         }
 
-        calculateTotalPrice()
+        val updatedCart = calculateTotalPrice()
 
-        addDomainEvent(CartItemAddedEvent(item.productId.value))
+        updatedCart.addDomainEvent(CartItemAddedEvent(item.productId.value))
 
-        return Cart(id, props.copy(updatedAt = Instant.now()))
+        return updatedCart
     }
 
-    fun removeItem(item: CartItem): Cart {
-        val existingItem = props.cartItems.find { it.productId == item.productId }
+    fun removeItem(cartItemId: CartItemId): Cart {
+        val existingItem = props.cartItems.find { it.id == cartItemId }
         require(existingItem != null) { "[Cart] 장바구니에 제거할 상품이 없습니다." }
 
         val removed = props.cartItems.remove(existingItem)
-        require(removed) { "[Cart] 장바구니에서 상품 제거 실패: ${item.id.value}" }
+        require(removed) { "[Cart] 장바구니에서 상품 제거 실패: ${cartItemId.value}" }
 
         calculateTotalPrice()
+
+        addDomainEvent(CartItemRemovedEvent(existingItem.productId.value))
 
         return Cart(id, props.copy(updatedAt = Instant.now()))
     }
 
     private fun calculateTotalPrice(): Cart {
-        return Cart(id, props.copy(totalPrice = props.cartItems
+        return Cart(id, props.copy(
+            totalPrice = props.cartItems
             .sumOf { it.price.times(it.quantity).value }
-            .let { Money.create(it) }))
+            .let { Money.create(it) },
+            updatedAt = Instant.now()
+        ))
     }
 
     val cartItems: MutableSet<CartItem> get() = props.cartItems

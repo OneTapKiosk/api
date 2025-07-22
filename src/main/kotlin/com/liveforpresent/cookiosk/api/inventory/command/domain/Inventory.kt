@@ -24,10 +24,14 @@ class Inventory private constructor(
     }
 
     fun increaseQuantity(amount: Int): Inventory {
-        return Inventory(id, props.copy(
+        val updatedInventory = Inventory(id, props.copy(
             quantity = props.quantity + amount,
             updatedAt = Instant.now()
         ))
+
+        updatedInventory.validate()
+
+        return updatedInventory
     }
 
     fun decreaseQuantity(amount: Int): Inventory {
@@ -37,11 +41,15 @@ class Inventory private constructor(
         val newQuantity = props.quantity - amount
         val newIsAvailable = !(newQuantity == 0 && props.isAvailable)
 
-        return Inventory(id, props.copy(
+        val updatedInventory = Inventory(id, props.copy(
             isAvailable = newIsAvailable,
             quantity = newQuantity,
             updatedAt = Instant.now()
         ))
+
+        updatedInventory.validate()
+
+        return updatedInventory
     }
 
     fun updateInventory(

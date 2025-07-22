@@ -1,8 +1,9 @@
 package com.liveforpresent.cookiosk.api.cart.command.presentation
 
-import com.liveforpresent.cookiosk.api.cart.command.application.command.CartItemCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.command.AddCartItemCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.command.RemoveCartItemCommand
 import com.liveforpresent.cookiosk.api.cart.command.application.handler.AddItemHandler
-import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
+import com.liveforpresent.cookiosk.api.cart.command.application.handler.RemoveItemHandler
 import com.liveforpresent.cookiosk.api.cart.command.presentation.dto.request.AddCartItemReqDto
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/cart")
 class CartCommandController(
-    private val addItemHandler: AddItemHandler
+    private val addItemHandler: AddItemHandler,
+    private val removeItemHandler: RemoveItemHandler,
 ) {
     // Return type: cartId
     @PostMapping
@@ -28,7 +30,7 @@ class CartCommandController(
 
     @PostMapping("/{cartId}/items")
     fun addItem(@PathVariable cartId: Long, @RequestBody reqDto: AddCartItemReqDto): ResponseEntity<BaseApiResponse<Unit>> {
-        val command = CartItemCommand(
+        val command = AddCartItemCommand(
             cartId = cartId,
             name = reqDto.name,
             price = reqDto.price,
@@ -56,8 +58,20 @@ class CartCommandController(
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{cartId}/items/{itemId}")
-    fun deleteItem(@PathVariable cartId: String, @PathVariable itemId: String): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{cartId}/items/{cartItemId}")
+    fun deleteItem(@PathVariable cartId: Long, @PathVariable cartItemId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = RemoveCartItemCommand(
+            cartId = cartId,
+            cartItemId = cartItemId
+        )
+
+        removeItemHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "장바구니 상품 삭제 성공"
+        )
+
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }
