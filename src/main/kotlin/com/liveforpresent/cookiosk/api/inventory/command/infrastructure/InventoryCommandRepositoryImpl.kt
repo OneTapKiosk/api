@@ -16,7 +16,15 @@ class InventoryCommandRepositoryImpl(
     }
 
     override fun findOne(id: Long): Inventory {
-        val inventoryEntity = inventoryCommandJpaRepository.findById(id).orElseThrow()
+        val inventoryEntity = inventoryCommandJpaRepository.findById(id)
+            .orElseThrow { IllegalArgumentException("해당 재고가 존재하지 않습니다.") }
+
+        return InventoryEntity.toDomain(inventoryEntity)
+    }
+
+    override fun findByProductId(productId: Long): Inventory {
+        val inventoryEntity = inventoryCommandJpaRepository.findByProductId(productId)
+            .orElseThrow { IllegalArgumentException("해당 재고가 존재하지 않습니다.") }
 
         return InventoryEntity.toDomain(inventoryEntity)
     }

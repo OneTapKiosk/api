@@ -46,9 +46,9 @@ class InventoryCommandController(
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
-    @DeleteMapping("{inventoryId}")
-    fun deleteInventory(@PathVariable inventoryId: Long): ResponseEntity<BaseApiResponse<Unit>> {
-        val command = DeleteInventoryCommand(inventoryId)
+    @DeleteMapping("{productId}")
+    fun deleteInventory(@PathVariable productId: Long): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = DeleteInventoryCommand(productId)
 
         deleteInventoryHandler.execute(command)
 

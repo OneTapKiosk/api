@@ -2,6 +2,7 @@ package com.liveforpresent.cookiosk.api.product.command.domain
 
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.event.ProductCreatedEvent
+import com.liveforpresent.cookiosk.api.product.command.domain.event.ProductDeletedEvent
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
@@ -73,6 +74,7 @@ class Product private constructor(
                 deletedAt = Instant.now(),
             )
         )
+        updatedProduct.addDomainEvent(ProductDeletedEvent(updatedProduct.productId.value))
 
         return updatedProduct
     }
