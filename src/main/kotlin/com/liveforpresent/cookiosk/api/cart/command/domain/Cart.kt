@@ -1,8 +1,8 @@
 package com.liveforpresent.cookiosk.api.cart.command.domain
 
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
+import com.liveforpresent.cookiosk.api.cart.command.domain.event.CartItemAddedEvent
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartId
-import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
@@ -26,7 +26,7 @@ class Cart private constructor(
     }
 
     fun addItem(item: CartItem): Cart {
-        val existingItem = props.cartItems.find { it.id == item.id }
+        val existingItem = props.cartItems.find { it.productId == item.productId }
 
         if (existingItem == null) cartItems.add(item)
         else {
@@ -37,11 +37,13 @@ class Cart private constructor(
 
         calculateTotalPrice()
 
+        addDomainEvent(CartItemAddedEvent(item.productId.value))
+
         return Cart(id, props.copy(updatedAt = Instant.now()))
     }
 
     fun removeItem(item: CartItem): Cart {
-        val existingItem = props.cartItems.find { it.id == item.id }
+        val existingItem = props.cartItems.find { it.productId == item.productId }
         require(existingItem != null) { "[Cart] 장바구니에 제거할 상품이 없습니다." }
 
         val removed = props.cartItems.remove(existingItem)

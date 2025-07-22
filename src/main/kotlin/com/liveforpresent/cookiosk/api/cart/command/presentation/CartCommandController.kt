@@ -1,6 +1,9 @@
 package com.liveforpresent.cookiosk.api.cart.command.presentation
 
+import com.liveforpresent.cookiosk.api.cart.command.application.command.CartItemCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.handler.AddItemHandler
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
+import com.liveforpresent.cookiosk.api.cart.command.presentation.dto.request.AddCartItemReqDto
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/cart")
-class CartCommandController {
+class CartCommandController(
+    private val addItemHandler: AddItemHandler
+) {
     // Return type: cartId
     @PostMapping
     fun createCart(): ResponseEntity<BaseApiResponse<Unit>> {
@@ -22,8 +27,24 @@ class CartCommandController {
     }
 
     @PostMapping("/{cartId}/items")
-    fun addItem(@PathVariable cartId: String, @RequestBody addItemReqDto: Any): ResponseEntity<BaseApiResponse<Unit>> {
-        return ResponseEntity(HttpStatus.CREATED)
+    fun addItem(@PathVariable cartId: Long, @RequestBody reqDto: AddCartItemReqDto): ResponseEntity<BaseApiResponse<Unit>> {
+        val command = CartItemCommand(
+            cartId = cartId,
+            name = reqDto.name,
+            price = reqDto.price,
+            imageUrl = reqDto.imageUrl,
+            quantity = reqDto.quantity,
+            productId = reqDto.productId
+        )
+
+        addItemHandler.execute(command)
+
+        val response = BaseApiResponse<Unit>(
+            success = true,
+            message = "장바구니 상품 추가 성공"
+        )
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
     @PatchMapping("/{cartId}/items/{itemId}")
