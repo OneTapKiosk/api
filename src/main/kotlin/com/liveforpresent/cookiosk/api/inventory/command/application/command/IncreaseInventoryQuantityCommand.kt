@@ -1,5 +1,5 @@
 package com.liveforpresent.cookiosk.api.inventory.command.application.command
 
-data class DeleteInventoryCommand(
+data class IncreaseInventoryQuantityCommand(
     val productId: Long
 )

@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.cart.command.domain.entity
 
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.BaseEntity
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
@@ -43,6 +44,7 @@ class CartItem private constructor(
     val price: Money get() = props.price
     val imageUrl: ImageUrl get() = props.imageUrl
     val quantity: Int get() = props.quantity
+    val productId: ProductId get() = props.productId
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

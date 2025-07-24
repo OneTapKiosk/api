@@ -8,6 +8,7 @@ import com.liveforpresent.cookiosk.api.product.command.domain.ProductProps
 import com.liveforpresent.cookiosk.api.product.command.domain.event.ProductCreatedEvent
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class CreateProductHandler(
     private val productCommandRepository: ProductCommandRepository,
-    private val eventPublisher: ApplicationEventPublisher
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: CreateProductCommand) {
@@ -39,6 +40,6 @@ class CreateProductHandler(
 
         productCommandRepository.save(product)
 
-        eventPublisher.publishEvent(ProductCreatedEvent(productId, quantity = 0, kioskId = productProps.kioskId))
+        eventPublisher.publish(product)
     }
 }

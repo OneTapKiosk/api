@@ -11,15 +11,16 @@ import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleId
 import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleItemId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 @Service
 class CreateSaleHandler(
-    private val saleCommandRepository: SaleCommandRepository
+    private val saleCommandRepository: SaleCommandRepository,
 ) {
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun execute(command: CreateSaleCommand) {
         val saleItems = command.saleItems.map { SaleItem.create(
             SaleItemId(SnowflakeIdUtil.generateId()), SaleItemProps(

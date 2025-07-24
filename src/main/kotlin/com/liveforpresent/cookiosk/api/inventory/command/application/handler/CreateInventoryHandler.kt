@@ -6,26 +6,24 @@ import com.liveforpresent.cookiosk.api.inventory.command.domain.InventoryCommand
 import com.liveforpresent.cookiosk.api.inventory.command.domain.InventoryProps
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
-import com.liveforpresent.cookiosk.api.product.command.domain.event.ProductCreatedEvent
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
-import jakarta.transaction.Transactional
-import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 @Service
 class CreateInventoryHandler(
     private val inventoryCommandRepository: InventoryCommandRepository
 ) {
-    @EventListener
-    @Transactional
-    fun execute(event: ProductCreatedEvent) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    fun execute(command: CreateInventoryCommand) {
         val inventoryProps = InventoryProps(
             isAvailable = true,
-            quantity = 0,
-            productId = event.productId,
-            kioskId = event.kioskId,
+            quantity = command.quantity,
+            productId = ProductId(command.productId),
+            kioskId = KioskId(command.kioskId),
             createdAt = Instant.now(),
             updatedAt = Instant.now()
         )
