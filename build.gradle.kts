@@ -42,6 +42,9 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
 
+	// redis
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
 	// test - kotest
 	testImplementation("io.kotest:kotest-runner-junit5:6.0.0.M5")
 	testImplementation("io.kotest:kotest-assertions-core:6.0.0.M5")
