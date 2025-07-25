@@ -48,14 +48,20 @@ class Cart private constructor(
         val existingItem = props.cartItems.find { it.id == cartItemId }
         require(existingItem != null) { "[Cart] 장바구니에 제거할 상품이 없습니다." }
 
-        val removed = props.cartItems.remove(existingItem)
-        require(removed) { "[Cart] 장바구니에서 상품 제거 실패: ${cartItemId.value}" }
+        if (existingItem.quantity > 1) {
+            val updatedItem = existingItem.decreaseQuantity()
+            props.cartItems.remove(existingItem)
+            props.cartItems.add(updatedItem)
+        } else {
+            val removed = props.cartItems.remove(existingItem)
+            require(removed) { "[Cart] 장바구니에서 상품 제거 실패: ${cartItemId.value}" }
+        }
 
-        calculateTotalPrice()
+        val updatedCart = calculateTotalPrice()
 
         addDomainEvent(CartItemRemovedEvent(existingItem.productId.value))
 
-        return Cart(id, props.copy(updatedAt = Instant.now()))
+        return updatedCart
     }
 
     private fun calculateTotalPrice(): Cart {

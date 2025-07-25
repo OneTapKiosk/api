@@ -1,7 +1,7 @@
 package com.liveforpresent.cookiosk.api.cart.command.application.handler
 
 import com.liveforpresent.cookiosk.api.cart.command.application.command.AddCartItemCommand
-import com.liveforpresent.cookiosk.api.cart.command.domain.CartCommandRepository
+import com.liveforpresent.cookiosk.api.cart.command.domain.CartCommandRedisRepository
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItem
 import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItemProps
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
@@ -15,12 +15,13 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AddItemHandler(
-    private val cartCommandRepository: CartCommandRepository,
+    // private val cartCommandRepository: CartCommandRepository,
+    private val cartCommandRedisRepository: CartCommandRedisRepository,
     private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: AddCartItemCommand) {
-        val cart = cartCommandRepository.findById(command.cartId)
+        val cart = cartCommandRedisRepository.findById(command.cartId)
 
         val cartItem = CartItem.create(
             CartItemId(SnowflakeIdUtil.generateId()), CartItemProps(
@@ -31,11 +32,10 @@ class AddItemHandler(
                 productId = ProductId(command.productId)
             )
         )
-        // 저장 로직 - DB? cache memory?
 
         val updatedCart = cart.addItem(cartItem)
 
-        cartCommandRepository.save(updatedCart)
+        cartCommandRedisRepository.save(updatedCart)
 
         eventPublisher.publish(updatedCart)
     }
