@@ -3,6 +3,7 @@ package com.liveforpresent.cookiosk.api.cart.command.presentation
 import com.liveforpresent.cookiosk.api.cart.command.application.command.AddCartItemCommand
 import com.liveforpresent.cookiosk.api.cart.command.application.command.CreateCartCommand
 import com.liveforpresent.cookiosk.api.cart.command.application.command.RemoveCartItemCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.dto.CreateCartResDto
 import com.liveforpresent.cookiosk.api.cart.command.application.handler.AddItemHandler
 import com.liveforpresent.cookiosk.api.cart.command.application.handler.CreateCartHandler
 import com.liveforpresent.cookiosk.api.cart.command.application.handler.RemoveItemHandler
@@ -28,13 +29,14 @@ class CartCommandController(
 ) {
     // Return type: cartId
     @PostMapping
-    fun createCart(@RequestBody reqDto: CreateCartReqDto): ResponseEntity<BaseApiResponse<Unit>> {
+    fun createCart(@RequestBody reqDto: CreateCartReqDto): ResponseEntity<BaseApiResponse<CreateCartResDto>> {
         val command = CreateCartCommand(reqDto.kioskId)
-        createCartHandler.execute(command)
+        val data = createCartHandler.execute(command)
 
-        val response = BaseApiResponse<Unit>(
+        val response = BaseApiResponse<CreateCartResDto>(
             success = true,
-            message = "장바구니 생성 성공"
+            message = "장바구니 생성 성공",
+            data = data
         )
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response)

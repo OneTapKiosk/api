@@ -22,7 +22,7 @@ data class CartRedisEntity(
     val kioskId: Long
 ) {
     @TimeToLive
-    val ttl: Long = Duration.ofMinutes(3).seconds
+    var ttl: Long = Duration.ofMinutes(3).seconds
 
     companion object {
         fun toPersistence(cart: Cart): CartRedisEntity {

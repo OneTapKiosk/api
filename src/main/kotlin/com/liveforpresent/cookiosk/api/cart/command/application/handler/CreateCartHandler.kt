@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.cart.command.application.handler
 
 import com.liveforpresent.cookiosk.api.cart.command.application.command.CreateCartCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.dto.CreateCartResDto
 import com.liveforpresent.cookiosk.api.cart.command.domain.Cart
 import com.liveforpresent.cookiosk.api.cart.command.domain.CartCommandRedisRepository
 import com.liveforpresent.cookiosk.api.cart.command.domain.CartProps
@@ -15,7 +16,8 @@ import java.time.Instant
 class CreateCartHandler(
     private val cartCommandRedisRepository: CartCommandRedisRepository
 ) {
-    fun execute(command: CreateCartCommand) {
+    fun execute(command: CreateCartCommand): CreateCartResDto {
+        val cartId = CartId(SnowflakeIdUtil.generateId())
         val cartProps = CartProps(
             cartItems = mutableSetOf(),
             totalPrice = Money.create(0),
@@ -24,8 +26,10 @@ class CreateCartHandler(
             kioskId = KioskId(command.kioskId)
         )
 
-        val cart = Cart.create(CartId(SnowflakeIdUtil.generateId()), cartProps)
+        val cart = Cart.create(cartId, cartProps)
 
         cartCommandRedisRepository.save(cart)
+
+        return CreateCartResDto(cartId.value)
     }
 }
