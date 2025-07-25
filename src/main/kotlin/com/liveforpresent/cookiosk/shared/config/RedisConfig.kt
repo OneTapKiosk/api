@@ -1,5 +1,8 @@
 package com.liveforpresent.cookiosk.shared.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.liveforpresent.cookiosk.shared.config.env.RedisProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -33,8 +36,17 @@ class RedisConfig(
             this.valueSerializer = GenericJackson2JsonRedisSerializer()
             this.hashValueSerializer = GenericJackson2JsonRedisSerializer()
         }
+        redisTemplate.afterPropertiesSet()
 
         return redisTemplate
+    }
+
+    @Bean
+    fun objectMapper(): ObjectMapper {
+        val mapper = ObjectMapper()
+        mapper.registerModule(JavaTimeModule())
+        mapper.registerModule(KotlinModule.Builder().build())
+        return mapper
     }
 
     @Bean
