@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param
 import java.util.Optional
 
 interface ProductQueryJpaRepository: JpaRepository<ProductEntity, Long> {
-    fun findByIdAndIsDeletedFalse(id: Long): Optional<ProductModel>
-    fun findByNameAndIsDeletedFalse(name: String): Optional<ProductModel>
-    fun findByBarcodeAndIsDeletedFalse(barcode: String): Optional<ProductModel>
+    fun findByIdAndIsDeletedFalse(id: Long): Optional<ProductEntity>
+    fun findByNameAndIsDeletedFalse(name: String): Optional<ProductEntity>
+    fun findByBarcodeAndIsDeletedFalse(barcode: String): Optional<ProductEntity>
 
     @Query("""
         SELECT p FROM ProductEntity p
@@ -34,5 +34,5 @@ interface ProductQueryJpaRepository: JpaRepository<ProductEntity, Long> {
         @Param("maxPrice") maxPrice: Int?,
         @Param("categoryId") categoryId: Long?,
         @Param("sortBy") sortBy: String?
-    ): List<ProductModel>
+    ): List<ProductEntity>
 }
