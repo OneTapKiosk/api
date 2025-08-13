@@ -5,5 +5,5 @@ import java.time.Instant
 data class SaleModel(
     val createdAt: Instant,
     val totalPrice: Int,
-    val kioskId: Long
+    val kioskId: String
 )

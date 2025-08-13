@@ -25,12 +25,12 @@ class OrderQueryRepositoryImpl(
             .orElseThrow { IllegalArgumentException("해당 주문 내역이 존재하지 않습니다.") }
 
         return OrderDetailModel(
-            id = orderEntity.id,
+            id = orderEntity.id.toString(),
             status = orderEntity.status,
             totalPrice = orderEntity.totalPrice,
             kioskId = orderEntity.kioskId,
             orderItems = orderEntity.orderItems.map { OrderItemModel(
-                it.id,
+                it.id.toString(),
                 it.name,
                 it.price,
                 it.quantity
