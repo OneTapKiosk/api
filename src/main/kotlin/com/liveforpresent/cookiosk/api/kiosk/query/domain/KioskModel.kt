@@ -1,10 +1,10 @@
 package com.liveforpresent.cookiosk.api.kiosk.query.domain
 
-interface KioskModel {
-    fun getName(): String
-    fun getLocation(): String
-    fun getStatus(): String
-    fun getVersion(): String
-    fun getDevices(): Set<String>
-    fun getCompanyId(): String
-}
+data class KioskModel(
+    val name: String,
+    val location: String,
+    val status: String,
+    val version: String,
+    val devices: Set<String>,
+    val companyId: String
+)
