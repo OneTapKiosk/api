@@ -14,9 +14,9 @@ class CartQueryRedisRepositoryImpl(
             .orElseThrow { IllegalArgumentException("해당 장바구니가 존재하지 않습니다.") }
 
         val cartModel = CartModel(
-            id = cartEntity.id,
+            id = cartEntity.id.toString(),
             cartItems = cartEntity.cartItems.map { CartItemModel(
-                id = it.id,
+                id = it.id.toString(),
                 name = it.name,
                 price = it.price,
                 quantity = it.quantity,

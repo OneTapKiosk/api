@@ -30,6 +30,6 @@ class CreateCartHandler(
 
         cartCommandRedisRepository.save(cart)
 
-        return CreateCartResDto(cartId.value)
+        return CreateCartResDto(cartId.value.toString())
     }
 }

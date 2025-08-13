@@ -14,10 +14,10 @@ class CartQueryRepositoryImpl(
             .orElseThrow { IllegalArgumentException("해당 Cart는 존재하지 않습니다") }
 
         val cartModel = CartModel(
-            id = cartEntity.id,
+            id = cartEntity.id.toString(),
             cartItems = cartEntity.cartItems.map {
                 CartItemModel(
-                    id = it.id,
+                    id = it.id.toString(),
                     name = it.name,
                     quantity = it.quantity,
                     price = it.price,
