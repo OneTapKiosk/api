@@ -6,5 +6,5 @@ interface KioskModel {
     fun getStatus(): String
     fun getVersion(): String
     fun getDevices(): Set<String>
-    fun getCompanyId(): Long
+    fun getCompanyId(): String
 }
