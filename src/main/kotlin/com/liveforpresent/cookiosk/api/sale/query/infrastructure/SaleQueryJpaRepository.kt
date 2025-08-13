@@ -26,7 +26,7 @@ interface SaleQueryJpaRepository: JpaRepository<SaleEntity, Long> {
         @Param("endAt") endAt: Instant?,
         @Param("sortBy") sortBy: String?,
         @Param("kioskId") kioskId: Long
-    ): List<SaleModel>
+    ): List<SaleEntity>
 
     @Query("""
         SELECT si.name name, SUM(si.price * si.quantity) totalPrice, SUM(si.quantity) totalQuantity

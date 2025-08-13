@@ -16,7 +16,13 @@ class SaleQueryRepositoryImpl(
         sortBy: String?,
         kioskId: Long
     ): List<SaleModel> {
-        return saleQueryJpaRepository.findByCriteria(startAt, endAt, sortBy, kioskId)
+        val saleEntities = saleQueryJpaRepository.findByCriteria(startAt, endAt, sortBy, kioskId)
+
+        return saleEntities.map { SaleModel(
+            createdAt = it.createdAt,
+            totalPrice = it.totalPrice,
+            kioskId = it.kioskId.toString()
+        ) }
     }
 
     override fun findSummaryByItem(startAt: Instant?, endAt: Instant?, kioskId: Long): List<SaleByItemModel> {
