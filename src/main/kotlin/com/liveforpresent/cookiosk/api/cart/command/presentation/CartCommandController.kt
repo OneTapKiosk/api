@@ -66,7 +66,7 @@ class CartCommandController(
             price = reqDto.price,
             imageUrl = reqDto.imageUrl,
             quantity = reqDto.quantity,
-            productId = reqDto.productId
+            productId = reqDto.productId.toLong()
         )
 
         addItemHandler.execute(command)

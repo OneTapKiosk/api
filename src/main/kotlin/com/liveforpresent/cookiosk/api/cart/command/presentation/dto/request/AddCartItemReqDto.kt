@@ -5,5 +5,5 @@ data class AddCartItemReqDto(
     val price: Int,
     val imageUrl: String,
     val quantity: Int,
-    val productId: Long
+    val productId: String
 )
