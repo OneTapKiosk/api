@@ -22,6 +22,7 @@ class CartQueryRepositoryImpl(
                     quantity = it.quantity,
                     price = it.price,
                     imageUrl = it.imageUrl,
+                    productId = it.productId.toString()
                 )
             }.toSet(),
             totalPrice = cartEntity.totalPrice,

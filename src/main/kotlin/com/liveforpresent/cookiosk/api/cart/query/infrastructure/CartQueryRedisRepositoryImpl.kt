@@ -20,7 +20,8 @@ class CartQueryRedisRepositoryImpl(
                 name = it.name,
                 price = it.price,
                 quantity = it.quantity,
-                imageUrl = it.imageUrl
+                imageUrl = it.imageUrl,
+                productId = it.productId.toString()
             ) }.toSet(),
             totalPrice = cartEntity.totalPrice,
             createdAt = cartEntity.createdAt,
