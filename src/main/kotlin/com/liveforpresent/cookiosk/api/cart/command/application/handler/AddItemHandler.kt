@@ -35,8 +35,8 @@ class AddItemHandler(
 
         val updatedCart = cart.addItem(cartItem)
 
-        cartCommandRedisRepository.save(updatedCart)
-
         eventPublisher.publish(updatedCart)
+
+        cartCommandRedisRepository.save(updatedCart)
     }
 }
