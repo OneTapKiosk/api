@@ -4,6 +4,7 @@ import com.liveforpresent.cookiosk.api.cart.command.application.command.AddCartI
 import com.liveforpresent.cookiosk.api.cart.command.application.command.CreateCartCommand
 import com.liveforpresent.cookiosk.api.cart.command.application.command.DeleteCartCommand
 import com.liveforpresent.cookiosk.api.cart.command.application.command.RemoveCartItemCommand
+import com.liveforpresent.cookiosk.api.cart.command.application.dto.AddItemResDto
 import com.liveforpresent.cookiosk.api.cart.command.application.dto.CreateCartResDto
 import com.liveforpresent.cookiosk.api.cart.command.application.handler.AddItemHandler
 import com.liveforpresent.cookiosk.api.cart.command.application.handler.CreateCartHandler
@@ -59,7 +60,7 @@ class CartCommandController(
     }
 
     @PostMapping("/{cartId}/items")
-    fun addItem(@PathVariable cartId: Long, @RequestBody reqDto: AddCartItemReqDto): ResponseEntity<BaseApiResponse<Unit>> {
+    fun addItem(@PathVariable cartId: Long, @RequestBody reqDto: AddCartItemReqDto): ResponseEntity<BaseApiResponse<AddItemResDto>> {
         val command = AddCartItemCommand(
             cartId = cartId,
             name = reqDto.name,
@@ -69,11 +70,12 @@ class CartCommandController(
             productId = reqDto.productId.toLong()
         )
 
-        addItemHandler.execute(command)
+        val data = addItemHandler.execute(command)
 
-        val response = BaseApiResponse<Unit>(
+        val response = BaseApiResponse<AddItemResDto>(
             success = true,
-            message = "장바구니 상품 추가 성공"
+            message = "장바구니 상품 추가 성공",
+            data = data
         )
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
