@@ -37,6 +37,8 @@ class KioskCommandRepositoryImplTest: BehaviorSpec({
             version = kiosk.version,
             devices = kiosk.devices.map { device -> device.value }.toMutableSet(),
             companyId = kiosk.companyId.value,
+            isDeleted = false,
+            deletedAt = null
         )
 
         val domainReturnedFromJpa = KioskEntity.toDomain(entityReturnedFromJpa)

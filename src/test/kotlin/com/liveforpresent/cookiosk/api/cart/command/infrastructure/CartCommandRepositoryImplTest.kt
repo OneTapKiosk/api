@@ -7,6 +7,7 @@ import com.liveforpresent.cookiosk.api.cart.command.domain.entity.CartItemProps
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartId
 import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import io.kotest.core.spec.style.BehaviorSpec
@@ -29,6 +30,7 @@ class CartCommandRepositoryImplTest: BehaviorSpec({
             price = Money.create(1),
             imageUrl = ImageUrl.create("url"),
             quantity = 1,
+            productId = ProductId(1L)
         )
 
         val cartItem = CartItem.create(cartItemId, cartItemProps)
