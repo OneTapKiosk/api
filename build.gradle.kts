@@ -19,6 +19,9 @@ configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
+	all {
+		exclude(group= "ch.qos.logback", module = "logback-classic")
+	}
 }
 
 repositories {
@@ -45,12 +48,16 @@ dependencies {
 	// redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+	// log
+	implementation("org.slf4j:slf4j-api:2.0.9")
+
 	// test - kotest
 	testImplementation("io.kotest:kotest-runner-junit5:6.0.0.M5")
 	testImplementation("io.kotest:kotest-assertions-core:6.0.0.M5")
 	testImplementation("io.kotest:kotest-property:6.0.0.M5")
 	testImplementation("io.mockk:mockk:1.13.8")
 	testImplementation("com.h2database:h2")
+	testImplementation("it.ozimov:embedded-redis:0.7.3")
 
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
