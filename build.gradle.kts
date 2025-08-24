@@ -19,9 +19,6 @@ configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
-	all {
-		exclude(group= "ch.qos.logback", module = "logback-classic")
-	}
 }
 
 repositories {
@@ -49,7 +46,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 	// log
-	implementation("org.slf4j:slf4j-api:2.0.9")
+	// implementation("org.slf4j:slf4j-api:2.0.9")
 
 	// test - kotest
 	testImplementation("io.kotest:kotest-runner-junit5:6.0.0.M5")
