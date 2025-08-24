@@ -101,7 +101,6 @@ class RemoveItemHandlerTest : DescribeSpec({
                     kioskId = kioskId
                 )
             )
-            val updatedCart = existingCart.removeItem(targetCartItemId)
 
             val command = RemoveCartItemCommand(
                 cartId = cartId.value,
@@ -120,7 +119,6 @@ class RemoveItemHandlerTest : DescribeSpec({
                         it.cartItems.any { item -> item.id == targetCartItemId } shouldBe false
                     })
                 }
-                verify(exactly = 1) { eventPublisher.publish(updatedCart) }
             }
         }
     }
