@@ -11,7 +11,7 @@ import java.time.Instant
 
 class CreateInventoryHandlerTest : BehaviorSpec({
 
-    val inventoryCommandRepository = mockk<InventoryCommandRepository>(relaxed = true) // Mock Repository
+    val inventoryCommandRepository: InventoryCommandRepository = mockk<InventoryCommandRepository>()
     val createInventoryHandler = CreateInventoryHandler(inventoryCommandRepository)
 
     beforeSpec {
@@ -27,21 +27,19 @@ class CreateInventoryHandlerTest : BehaviorSpec({
         val kioskId = 1L
         val quantity = 10
         val isAvailable = true
-        val now = Instant.now()
         val generatedInventoryId = 1L
 
         val command = CreateInventoryCommand(
             isAvailable = isAvailable,
             quantity = quantity,
             productId = productId,
-            kioskId = kioskId,
-            createdAt = now,
-            updatedAt = now
+            kioskId = kioskId
         )
 
         every { SnowflakeIdUtil.generateId() } returns generatedInventoryId
 
         When("핸들러의 execute 메서드를 실행하면") {
+            every { inventoryCommandRepository.save(any()) } returnsArgument 0
             createInventoryHandler.execute(command)
 
             Then("InventoryCommandRepository의 save 메서드가 호출되어야 한다") {
@@ -53,8 +51,6 @@ class CreateInventoryHandlerTest : BehaviorSpec({
                             inventory.quantity shouldBe quantity
                             inventory.productId.value shouldBe productId
                             inventory.kioskId.value shouldBe kioskId
-                            inventory.createdAt shouldBe now
-                            inventory.updatedAt shouldBe now
                         }
                     )
                 }

@@ -59,7 +59,7 @@ class Cart private constructor(
 
         val updatedCart = calculateTotalPrice()
 
-        addDomainEvent(CartItemRemovedEvent(existingItem.productId.value))
+        updatedCart.addDomainEvent(CartItemRemovedEvent(existingItem.productId.value))
 
         return updatedCart
     }

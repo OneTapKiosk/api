@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.product.command.infrastructure
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.Product
 import com.liveforpresent.cookiosk.api.product.command.domain.ProductProps
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
@@ -26,6 +27,7 @@ class ProductCommandRepositoryImplTest: BehaviorSpec({
             barcode = Barcode.create("1111111111111"),
             description = "a description",
             categoryId = 1L,
+            kioskId = KioskId(1L)
         )
 
         val product = Product.create(productId, productProps)
@@ -40,7 +42,8 @@ class ProductCommandRepositoryImplTest: BehaviorSpec({
             description = product.description,
             categoryId = product.categoryId,
             isDeleted = false,
-            deletedAt = null
+            deletedAt = null,
+            kioskId = product.kioskId.value,
         )
 
         val domainReturnedFromJpa = ProductEntity.toDomain(entityReturnedFromJpa)

@@ -37,6 +37,8 @@ class InventoryCommandRepositoryImplTest: BehaviorSpec({
             kioskId =  inventory.kioskId.value,
             createdAt = inventory.createdAt,
             updatedAt = inventory.updatedAt,
+            isDeleted = false,
+            deletedAt = null
         )
 
         val domainReturnedFromJpa = InventoryEntity.toDomain(entityReturnedFromJpa)
