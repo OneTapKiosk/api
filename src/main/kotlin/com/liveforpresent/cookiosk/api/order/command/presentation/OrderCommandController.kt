@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.order.command.presentation
 
 import com.liveforpresent.cookiosk.api.order.command.application.command.UpdateOrderStatusCommand
+import com.liveforpresent.cookiosk.api.order.command.application.dto.CreateOrderResDto
 import com.liveforpresent.cookiosk.api.order.command.application.handler.*
 import com.liveforpresent.cookiosk.api.order.command.presentation.dto.request.CreateOrderReqDto
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
@@ -18,13 +19,14 @@ class OrderCommandController(
     private val processPaymentHandler: ProcessPaymentHandler
 ) {
     @PostMapping
-    fun createOrder(@RequestBody reqDto: CreateOrderReqDto): ResponseEntity<BaseApiResponse<Unit>> {
+    fun createOrder(@RequestBody reqDto: CreateOrderReqDto): ResponseEntity<BaseApiResponse<CreateOrderResDto>> {
         val command = reqDto.toCommand()
-        createOrderHandler.execute(command)
+        val data = createOrderHandler.execute(command)
 
-        val response = BaseApiResponse<Unit>(
+        val response = BaseApiResponse<CreateOrderResDto>(
             success = true,
             message = "주문 생성 성공",
+            data = data
         )
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response)

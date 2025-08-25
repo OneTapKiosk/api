@@ -2,6 +2,7 @@ package com.liveforpresent.cookiosk.api.order.command.application.handler
 
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.application.command.CreateOrderCommand
+import com.liveforpresent.cookiosk.api.order.command.application.dto.CreateOrderResDto
 import com.liveforpresent.cookiosk.api.order.command.domain.Order
 import com.liveforpresent.cookiosk.api.order.command.domain.OrderCommandRepository
 import com.liveforpresent.cookiosk.api.order.command.domain.OrderProps
@@ -21,7 +22,7 @@ class CreateOrderHandler(
     private val orderCommandRepository: OrderCommandRepository,
 ) {
     @Transactional
-    fun execute(command: CreateOrderCommand) {
+    fun execute(command: CreateOrderCommand): CreateOrderResDto {
         val orderItems = command.orderItems.map {
             OrderItem.create(
                 OrderItemId(SnowflakeIdUtil.generateId()),
@@ -45,5 +46,7 @@ class CreateOrderHandler(
         val order = Order.create(OrderId(SnowflakeIdUtil.generateId()), orderProps)
 
         orderCommandRepository.save(order)
+
+        return CreateOrderResDto(order.id.value.toString())
     }
 }
