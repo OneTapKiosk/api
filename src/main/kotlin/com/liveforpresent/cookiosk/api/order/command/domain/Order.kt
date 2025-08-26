@@ -3,6 +3,7 @@ package com.liveforpresent.cookiosk.api.order.command.domain
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
 import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderCreatedEvent
+import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderFinishedAsRejectEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderFinishedAsSuccessEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderProcessedToPaymentEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
@@ -71,10 +72,14 @@ class Order private constructor(
             "[Order] ${props.status.value} 상태에서는 주문 실패가 불가능합니다."
         }
 
-        return Order(id, props.copy(
+        val order = Order(id, props.copy(
             status = OrderStatus.REJECTED,
             updatedAt = Instant.now()
         ))
+
+        order.addDomainEvent(OrderFinishedAsRejectEvent())
+
+        return order
     }
 
     fun finishAsCancel(): Order {

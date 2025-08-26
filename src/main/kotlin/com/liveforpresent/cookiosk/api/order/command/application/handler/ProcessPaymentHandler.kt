@@ -19,6 +19,6 @@ class ProcessPaymentHandler(
 
         orderCommandRepository.save(updatedOrder)
 
-        eventPublisher.publish(order)
+        eventPublisher.publish(updatedOrder)
     }
 }
