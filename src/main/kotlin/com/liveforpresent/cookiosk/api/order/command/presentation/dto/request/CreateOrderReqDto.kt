@@ -4,11 +4,11 @@ import com.liveforpresent.cookiosk.api.order.command.application.command.CreateO
 import com.liveforpresent.cookiosk.api.order.command.application.command.OrderItemCommand
 
 data class CreateOrderReqDto(
-    val orderItemList: MutableSet<OrderItemDto>,
+    val orderItems: MutableSet<OrderItemDto>,
     val kioskId: Long
 ) {
     fun toCommand(): CreateOrderCommand {
-        val orderItems = orderItemList.map { OrderItemCommand(it.name, it.price, it.quantity) }.toMutableSet()
+        val orderItems = orderItems.map { OrderItemCommand(it.name, it.price, it.quantity) }.toMutableSet()
 
         return CreateOrderCommand(orderItems, kioskId)
     }
