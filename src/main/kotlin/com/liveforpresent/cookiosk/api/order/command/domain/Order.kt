@@ -4,6 +4,7 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
 import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderCreatedEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderFinishedAsSuccessEvent
+import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderProcessedToPaymentEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
@@ -36,10 +37,14 @@ class Order private constructor(
     fun processPayment(): Order {
         require(props.status.canTransitionTo(OrderStatus.PENDING)) { "[Order] ${props.status.value} 상태에서는 결제 단계로 넘어갈 수 없습니다." }
 
-        return Order(id, props.copy(
+        val order = Order(id, props.copy(
             status = OrderStatus.PENDING,
             updatedAt = Instant.now()
         ))
+
+        order.addDomainEvent(OrderProcessedToPaymentEvent())
+
+        return order
     }
 
     fun finishAsSuccess(): Order {
