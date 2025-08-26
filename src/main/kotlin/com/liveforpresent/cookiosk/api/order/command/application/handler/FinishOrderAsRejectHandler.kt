@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class FinishOrderAsRejectHandler(
-    val orderCommandRepository: OrderCommandRepository,
-    val eventPublisher: DomainEventPublisher
+    private val orderCommandRepository: OrderCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: UpdateOrderStatusCommand) {
