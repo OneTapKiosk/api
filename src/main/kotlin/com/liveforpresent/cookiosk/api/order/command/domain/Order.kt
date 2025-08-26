@@ -2,6 +2,7 @@ package com.liveforpresent.cookiosk.api.order.command.domain
 
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
+import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderCreatedEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.event.OrderFinishedAsSuccessEvent
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
@@ -18,6 +19,7 @@ class Order private constructor(
             val temp = Order(id, props)
             val order = temp.calculateTotalPrice()
             order.validate()
+            order.addDomainEvent(OrderCreatedEvent())
 
             return order
         }
