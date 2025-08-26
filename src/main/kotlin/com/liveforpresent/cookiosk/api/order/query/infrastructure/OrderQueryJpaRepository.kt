@@ -1,6 +1,5 @@
 package com.liveforpresent.cookiosk.api.order.query.infrastructure
 
-import com.liveforpresent.cookiosk.api.order.command.infrastructure.OrderEntity
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -8,13 +7,12 @@ import org.springframework.data.repository.query.Param
 import java.time.Instant
 import java.util.Optional
 
-interface OrderQueryJpaRepository : JpaRepository<OrderEntity, Long> {
+interface OrderQueryJpaRepository : JpaRepository<OrderView, Long> {
     @Query("""
-        SELECT o FROM OrderEntity o
-        LEFT JOIN FETCH o.orderItems oi
+        SELECT o FROM OrderView o
         WHERE o.id = :orderId
         """)
-    fun findWithItemsById(@Param("orderId") orderId: Long): Optional<OrderEntity>
+    fun findWithItemsById(@Param("orderId") orderId: Long): Optional<OrderView>
 
     @Query("""
         SELECT o FROM OrderEntity o

@@ -10,4 +10,5 @@ interface OrderQueryRepository {
         sortBy: String?
     ): List<OrderModel>
     fun findById(orderId: Long): OrderDetailModel
+    fun refreshView()
 }
