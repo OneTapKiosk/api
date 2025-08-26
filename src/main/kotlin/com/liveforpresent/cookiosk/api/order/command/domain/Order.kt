@@ -87,10 +87,14 @@ class Order private constructor(
             "[Order] ${props.status.value} 상태에서는 주문 취소가 불가능합니다."
         }
 
-        return Order(id, props.copy(
+        val order =  Order(id, props.copy(
             status = OrderStatus.CANCELLED,
             updatedAt = Instant.now()
         ))
+
+        order.addDomainEvent(OrderProcessedToPaymentEvent())
+
+        return order
     }
 
     val orderItems: MutableSet<OrderItem> get() = props.orderItems
