@@ -10,4 +10,5 @@ interface ProductQueryRepository {
     fun findById(id: Long): ProductModel
     fun findByName(name: String): ProductModel
     fun findByBarcode(barcode: String): ProductModel
+    fun refreshView()
 }

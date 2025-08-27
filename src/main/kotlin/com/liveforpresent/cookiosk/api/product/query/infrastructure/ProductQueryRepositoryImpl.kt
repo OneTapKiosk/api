@@ -2,11 +2,13 @@ package com.liveforpresent.cookiosk.api.product.query.infrastructure
 
 import com.liveforpresent.cookiosk.api.product.query.domain.ProductModel
 import com.liveforpresent.cookiosk.api.product.query.domain.ProductQueryRepository
+import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 
 @Repository
 class ProductQueryRepositoryImpl(
-    private val productQueryJpaRepository: ProductQueryJpaRepository
+    private val productQueryJpaRepository: ProductQueryJpaRepository,
+    private val em: EntityManager
 ): ProductQueryRepository {
     override fun findByCriteria(
         name: String?,
@@ -15,9 +17,9 @@ class ProductQueryRepositoryImpl(
         categoryId: Long?,
         sortBy: String?,
     ): List<ProductModel> {
-        val productEntities = productQueryJpaRepository.findByCriteria(name, minPrice, maxPrice, categoryId, sortBy)
+        val productViews = productQueryJpaRepository.findByCriteria(name, minPrice, maxPrice, categoryId, sortBy)
 
-        return productEntities.map { ProductModel(
+        return productViews.map { ProductModel(
             id = it.id.toString(),
             name = it.name,
             price = it.price,
@@ -30,50 +32,55 @@ class ProductQueryRepositoryImpl(
     }
 
     override fun findById(id: Long): ProductModel {
-        val productEntity = productQueryJpaRepository.findByIdAndIsDeletedFalse(id)
+        val productView = productQueryJpaRepository.findById(id)
             .orElseThrow { IllegalArgumentException("해당 상품이 존재 하지 않습니다.") }
 
         return ProductModel(
-            id = productEntity.id.toString(),
-            name = productEntity.name,
-            price = productEntity.price,
-            imageUrl = productEntity.imageUrl,
-            displayOrder = productEntity.displayOrder,
-            barcode = productEntity.barcode,
-            description = productEntity.description,
-            categoryId = productEntity.categoryId.toString()
+            id = productView.id.toString(),
+            name = productView.name,
+            price = productView.price,
+            imageUrl = productView.imageUrl,
+            displayOrder = productView.displayOrder,
+            barcode = productView.barcode,
+            description = productView.description,
+            categoryId = productView.categoryId.toString()
         )
     }
 
     override fun findByName(name: String): ProductModel {
-        val productEntity = productQueryJpaRepository.findByNameAndIsDeletedFalse(name)
+        val productView = productQueryJpaRepository.findByName(name)
             .orElseThrow { IllegalArgumentException("해당 상품이 존재 하지 않습니다.") }
 
         return ProductModel(
-            id = productEntity.id.toString(),
-            name = productEntity.name,
-            price = productEntity.price,
-            imageUrl = productEntity.imageUrl,
-            displayOrder = productEntity.displayOrder,
-            barcode = productEntity.barcode,
-            description = productEntity.description,
-            categoryId = productEntity.categoryId.toString()
+            id = productView.id.toString(),
+            name = productView.name,
+            price = productView.price,
+            imageUrl = productView.imageUrl,
+            displayOrder = productView.displayOrder,
+            barcode = productView.barcode,
+            description = productView.description,
+            categoryId = productView.categoryId.toString()
         )
     }
 
     override fun findByBarcode(barcode: String): ProductModel {
-        val productEntity = productQueryJpaRepository.findByBarcodeAndIsDeletedFalse(barcode)
+        val productView = productQueryJpaRepository.findByBarcode(barcode)
             .orElseThrow { IllegalArgumentException("해당 상품이 존재 하지 않습니다.") }
 
         return ProductModel(
-            id = productEntity.id.toString(),
-            name = productEntity.name,
-            price = productEntity.price,
-            imageUrl = productEntity.imageUrl,
-            displayOrder = productEntity.displayOrder,
-            barcode = productEntity.barcode,
-            description = productEntity.description,
-            categoryId = productEntity.categoryId.toString()
+            id = productView.id.toString(),
+            name = productView.name,
+            price = productView.price,
+            imageUrl = productView.imageUrl,
+            displayOrder = productView.displayOrder,
+            barcode = productView.barcode,
+            description = productView.description,
+            categoryId = productView.categoryId.toString()
         )
+    }
+
+    override fun refreshView() {
+        em.createNativeQuery("REFRESH MATERIALIZED VIEW CONCURRENTLY vw_product")
+            .executeUpdate()
     }
 }

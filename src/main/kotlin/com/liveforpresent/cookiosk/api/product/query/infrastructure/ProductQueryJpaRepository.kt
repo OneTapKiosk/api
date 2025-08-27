@@ -1,23 +1,19 @@
 package com.liveforpresent.cookiosk.api.product.query.infrastructure
 
-import com.liveforpresent.cookiosk.api.product.command.infrastructure.ProductEntity
-import com.liveforpresent.cookiosk.api.product.query.domain.ProductModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.util.Optional
 
-interface ProductQueryJpaRepository: JpaRepository<ProductEntity, Long> {
-    fun findByIdAndIsDeletedFalse(id: Long): Optional<ProductEntity>
-    fun findByNameAndIsDeletedFalse(name: String): Optional<ProductEntity>
-    fun findByBarcodeAndIsDeletedFalse(barcode: String): Optional<ProductEntity>
+interface ProductQueryJpaRepository: JpaRepository<ProductView, Long> {
+    fun findByName(name: String): Optional<ProductView>
+    fun findByBarcode(barcode: String): Optional<ProductView>
 
     @Query("""
-        SELECT p FROM ProductEntity p
-        WHERE p.isDeleted = false
-        AND (:name IS NULL OR lower(p.name) LIKE lower(concat('%', :name, '%')))
-        AND (:minPrice IS NULL OR p.price >= :minPrice)
+        SELECT p FROM ProductView p
+        WHERE (:name IS NULL OR p.name ILIKE concat('%', cast(:name as string), '%'))
         AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+        AND (:minPrice IS NULL OR p.price >= :minPrice)
         AND (:categoryId IS NULL OR p.categoryId = :categoryId)
         ORDER BY
             CASE WHEN :sortBy = 'NAME_ASC' THEN p.name END ASC,
@@ -34,5 +30,5 @@ interface ProductQueryJpaRepository: JpaRepository<ProductEntity, Long> {
         @Param("maxPrice") maxPrice: Int?,
         @Param("categoryId") categoryId: Long?,
         @Param("sortBy") sortBy: String?
-    ): List<ProductEntity>
+    ): List<ProductView>
 }
