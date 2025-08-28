@@ -1,6 +1,8 @@
 package com.liveforpresent.cookiosk.api.inventory.command.domain
 
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryCreatedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryQuantityIncreasedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryUpdatedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
@@ -32,6 +34,8 @@ class Inventory private constructor(
         ))
 
         updatedInventory.validate()
+
+        updatedInventory.addDomainEvent(InventoryQuantityIncreasedEvent())
 
         return updatedInventory
     }
@@ -66,6 +70,8 @@ class Inventory private constructor(
             updatedAt = Instant.now()
         ))
         updatedInventory.validate()
+
+        updatedInventory.addDomainEvent(InventoryUpdatedEvent())
 
         return updatedInventory
     }
