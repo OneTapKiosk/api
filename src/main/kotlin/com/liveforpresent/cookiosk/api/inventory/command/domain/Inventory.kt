@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.inventory.command.domain
 
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryCreatedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryDeletedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryQuantityIncreasedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryUpdatedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
@@ -81,6 +82,8 @@ class Inventory private constructor(
             isDeleted = true,
             deletedAt = Instant.now()
         ))
+
+        updatedInventory.addDomainEvent(InventoryDeletedEvent())
 
         return updatedInventory
     }
