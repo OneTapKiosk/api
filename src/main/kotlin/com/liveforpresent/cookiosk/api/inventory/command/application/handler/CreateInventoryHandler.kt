@@ -7,6 +7,7 @@ import com.liveforpresent.cookiosk.api.inventory.command.domain.InventoryProps
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -15,7 +16,8 @@ import java.time.Instant
 
 @Service
 class CreateInventoryHandler(
-    private val inventoryCommandRepository: InventoryCommandRepository
+    private val inventoryCommandRepository: InventoryCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun execute(command: CreateInventoryCommand) {
@@ -31,5 +33,7 @@ class CreateInventoryHandler(
         val inventory = Inventory.create(InventoryId(SnowflakeIdUtil.generateId()), inventoryProps)
 
         inventoryCommandRepository.save(inventory)
+
+        eventPublisher.publish(inventory)
     }
 }

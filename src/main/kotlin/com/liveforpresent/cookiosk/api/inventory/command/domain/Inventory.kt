@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.inventory.command.domain
 
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryCreatedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
@@ -14,6 +15,7 @@ class Inventory private constructor(
         fun create(id: InventoryId, props: InventoryProps): Inventory {
             val inventory = Inventory(id, props)
             inventory.validate()
+            inventory.addDomainEvent(InventoryCreatedEvent())
 
             return inventory
         }
