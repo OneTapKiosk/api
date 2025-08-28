@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.kiosk.command.domain
 
+import com.liveforpresent.cookiosk.api.kiosk.command.domain.event.KioskCreatedEvent
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
@@ -15,6 +16,8 @@ class Kiosk private constructor(
         fun create(id: KioskId, props: KioskProps): Kiosk {
             val kiosk = Kiosk(id, props)
             kiosk.validate()
+
+            kiosk.addDomainEvent(KioskCreatedEvent())
 
             return kiosk
         }
