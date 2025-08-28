@@ -5,4 +5,5 @@ interface InventoryQueryRepository {
         isAvailable: Boolean?,
         sortBy: String?
     ): List<InventoryModel>
+    fun refreshView()
 }

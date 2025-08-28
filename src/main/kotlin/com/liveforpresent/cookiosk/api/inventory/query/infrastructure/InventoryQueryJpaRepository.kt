@@ -1,16 +1,13 @@
 package com.liveforpresent.cookiosk.api.inventory.query.infrastructure
 
-import com.liveforpresent.cookiosk.api.inventory.command.infrastructure.InventoryEntity
-import com.liveforpresent.cookiosk.api.inventory.query.domain.InventoryModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
-interface InventoryQueryJpaRepository: JpaRepository<InventoryEntity, Long> {
+interface InventoryQueryJpaRepository: JpaRepository<InventoryView, Long> {
     @Query("""
-        SELECT i FROM InventoryEntity i
+        SELECT i FROM InventoryView i
         WHERE (:isAvailable IS NULL OR i.isAvailable = :isAvailable)
-        AND i.isDeleted = false
         ORDER BY
         CASE WHEN :sortBy = 'QUANTITY_ASC' THEN i.quantity END ASC,
         CASE WHEN :sortBy = 'QUANTITY_DESC' THEN i.quantity END DESC,
@@ -23,5 +20,5 @@ interface InventoryQueryJpaRepository: JpaRepository<InventoryEntity, Long> {
     fun findByCriteria(
         @Param("isAvailable") isAvailable: Boolean?,
         @Param("sortBy") sortBy: String?
-    ): List<InventoryModel>
+    ): List<InventoryView>
 }
