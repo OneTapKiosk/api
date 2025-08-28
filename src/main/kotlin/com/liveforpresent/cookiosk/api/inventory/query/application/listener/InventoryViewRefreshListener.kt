@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.inventory.query.application.listener
 
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryCreatedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryDeletedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryQuantityIncreasedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryUpdatedEvent
 import com.liveforpresent.cookiosk.api.inventory.query.application.handler.RefreshInventoryViewHandler
@@ -23,6 +24,11 @@ class InventoryViewRefreshListener(
 
     @TransactionalEventListener
     fun handleUpdate(event: InventoryUpdatedEvent) {
+        refreshInventoryViewHandler.execute()
+    }
+
+    @TransactionalEventListener
+    fun handleDelete(event: InventoryDeletedEvent) {
         refreshInventoryViewHandler.execute()
     }
 }
