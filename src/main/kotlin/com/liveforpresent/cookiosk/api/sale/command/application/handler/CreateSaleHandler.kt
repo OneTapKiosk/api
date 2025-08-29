@@ -9,6 +9,7 @@ import com.liveforpresent.cookiosk.api.sale.command.domain.entity.SaleItem
 import com.liveforpresent.cookiosk.api.sale.command.domain.entity.SaleItemProps
 import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleId
 import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleItemId
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import org.springframework.stereotype.Service
@@ -19,6 +20,7 @@ import java.time.Instant
 @Service
 class CreateSaleHandler(
     private val saleCommandRepository: SaleCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun execute(command: CreateSaleCommand) {
@@ -40,5 +42,7 @@ class CreateSaleHandler(
         val sale = Sale.create(SaleId(SnowflakeIdUtil.generateId()), saleProps)
 
         saleCommandRepository.save(sale)
+
+        eventPublisher.publish(sale)
     }
 }
