@@ -5,12 +5,14 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.KioskCommandReposito
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskStatus
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class UpdateKioskHandler(
-    private val kioskCommandRepository: KioskCommandRepository
+    private val kioskCommandRepository: KioskCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: UpdateKioskCommand) {
@@ -26,5 +28,7 @@ class UpdateKioskHandler(
         )
 
         kioskCommandRepository.save(updatedKiosk)
+
+        eventPublisher.publish(updatedKiosk)
     }
 }
