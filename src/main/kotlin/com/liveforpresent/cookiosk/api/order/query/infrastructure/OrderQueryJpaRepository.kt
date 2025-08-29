@@ -15,9 +15,9 @@ interface OrderQueryJpaRepository : JpaRepository<OrderView, Long> {
     fun findWithItemsById(@Param("orderId") orderId: Long): Optional<OrderView>
 
     @Query("""
-        SELECT o FROM OrderEntity o
-        WHERE (:startAt IS NULL OR o.createdAt >= :startAt)
-        AND (:endAt IS NULL OR o.createdAt <= :endAt)
+        SELECT o FROM OrderView o
+        WHERE (o.createdAt >= COALESCE(:startAt, o.createdAt))
+        AND (o.createdAt <= COALESCE(:endAt, o.createdAt))
         AND (:#{#statuses == null || #statuses.isEmpty()} = TRUE OR o.status IN (:statuses))
         ORDER BY
             CASE WHEN :sortBy = 'TOTAL_PRICE_ASC' THEN o.totalPrice END ASC,
@@ -29,5 +29,5 @@ interface OrderQueryJpaRepository : JpaRepository<OrderView, Long> {
         @Param("endAt") endAt: Instant?,
         @Param("statuses") statuses: List<String>?,
         @Param("sortBy") sortBy: String?,
-    ): List<OrderModel>
+    ): List<OrderView>
 }

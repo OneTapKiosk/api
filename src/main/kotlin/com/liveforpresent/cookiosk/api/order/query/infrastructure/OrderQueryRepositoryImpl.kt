@@ -19,7 +19,18 @@ class OrderQueryRepositoryImpl(
         statuses: List<String>?,
         sortBy: String?,
     ): List<OrderModel> {
-        return orderQueryJpaRepository.findByCriteria(startAt, endAt, statuses, sortBy)
+        val orderViews = orderQueryJpaRepository.findByCriteria(startAt, endAt, statuses, sortBy)
+
+        return orderViews.map {
+            OrderModel(
+                id = it.id.toString(),
+                status = it.status,
+                totalPrice = it.totalPrice,
+                kioskId = it.kioskId,
+                createdAt = it.createdAt,
+                updatedAt = it.updatedAt
+            )
+        }
     }
 
     override fun findById(orderId: Long): OrderDetailModel {
