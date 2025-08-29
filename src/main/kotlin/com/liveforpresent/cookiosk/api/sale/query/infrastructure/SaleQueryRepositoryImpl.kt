@@ -1,6 +1,5 @@
 package com.liveforpresent.cookiosk.api.sale.query.infrastructure
 
-import com.liveforpresent.cookiosk.api.sale.query.domain.SaleByItemModel
 import com.liveforpresent.cookiosk.api.sale.query.domain.SaleModel
 import com.liveforpresent.cookiosk.api.sale.query.domain.SaleQueryRepository
 import jakarta.persistence.EntityManager
