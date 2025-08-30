@@ -10,6 +10,8 @@ import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import java.time.Instant
 
 class Order private constructor(
@@ -36,7 +38,12 @@ class Order private constructor(
     }
 
     fun processPayment(): Order {
-        require(props.status.canTransitionTo(OrderStatus.PENDING)) { "[Order] ${props.status.value} 상태에서는 결제 단계로 넘어갈 수 없습니다." }
+        require(props.status.canTransitionTo(OrderStatus.PENDING)) {
+            throw CustomException(
+                CustomExceptionCode.ORDER_INVALID_STATE,
+                "[Order] ${props.status.value} 상태에서는 결제 단계로 넘어갈 수 없습니다."
+            )
+        }
 
         val order = Order(id, props.copy(
             status = OrderStatus.PENDING,
@@ -50,7 +57,10 @@ class Order private constructor(
 
     fun finishAsSuccess(): Order {
         require(props.status.canTransitionTo(OrderStatus.SUCCESS)) {
-            "[Order] ${props.status.value} 상태에서는 주문 성공이 불가능합니다."
+            throw CustomException(
+                CustomExceptionCode.ORDER_INVALID_STATE,
+                "[Order] ${props.status.value} 상태에서는 주문 성공이 불가능합니다."
+            )
         }
 
         val updatedOrder =  Order(id, props.copy(
@@ -69,7 +79,10 @@ class Order private constructor(
 
     fun finishAsReject(): Order {
         require(props.status.canTransitionTo(OrderStatus.REJECTED)) {
-            "[Order] ${props.status.value} 상태에서는 주문 실패가 불가능합니다."
+            throw CustomException(
+                CustomExceptionCode.ORDER_INVALID_STATE,
+                "[Order] ${props.status.value} 상태에서는 주문 실패가 불가능합니다."
+            )
         }
 
         val order = Order(id, props.copy(
@@ -84,7 +97,10 @@ class Order private constructor(
 
     fun finishAsCancel(): Order {
         require(props.status.canTransitionTo(OrderStatus.CANCELLED)) {
-            "[Order] ${props.status.value} 상태에서는 주문 취소가 불가능합니다."
+            throw CustomException(
+                CustomExceptionCode.ORDER_INVALID_STATE,
+                "[Order] ${props.status.value} 상태에서는 주문 취소가 불가능합니다."
+            )
         }
 
         val order =  Order(id, props.copy(

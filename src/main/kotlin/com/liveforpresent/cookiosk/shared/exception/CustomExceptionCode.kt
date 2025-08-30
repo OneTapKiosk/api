@@ -12,5 +12,15 @@ enum class CustomExceptionCode(
     PRODUCT_PRICE_NEGATIVE(HttpStatus.BAD_REQUEST, "[Product] 상품 가격은 음수일 수 없습니다."),
     PRODUCT_DISPLAY_ORDER_NEGATIVE(HttpStatus.BAD_REQUEST, "[Product] 상품 정렬 순서는 음수일 수 없습니다."),
     PRODUCT_DESCRIPTION_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "[Product] 상품 설명은 최대 127자 입니다."),
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "[ProductCommandRepository] 해당 상품을 찾을 수 없습니다")
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "[ProductRepository] 해당 상품을 찾을 수 없습니다"),
+
+    // Order
+    ORDER_INVALID_STATE(HttpStatus.BAD_REQUEST, "[Order] 주문 상태가 유효하지 않습니다."),
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "[OrderRepository] 해당 주문이 존재하지 않습니다."),
+
+    ORDER_ITEM_NAME_EMPTY(HttpStatus.BAD_REQUEST, "[OrderItem] 상품명은 필수입니다."),
+    ORDER_ITEM_NAME_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "[OrderItem] 상품명은 최대 31자 입니다."),
+    ORDER_ITEM_PRICE_NEGATIVE(HttpStatus.BAD_REQUEST, "[OrderItem] 상품 가격은 음수일 수 없습니다."),
+
+    ORDER_STATUS_INVALID_STATE(HttpStatus.BAD_REQUEST, "[OrderStatus] 주문 상태가 유효하지 않습니다."),
 }

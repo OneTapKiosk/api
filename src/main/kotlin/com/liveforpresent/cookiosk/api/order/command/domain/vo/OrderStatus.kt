@@ -20,7 +20,9 @@ class OrderStatus(val value: String) {
     }
 
     fun validate() {
-        require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) { "[OrderStatus]유효하지 않은 주문 상태 입니다." }
+        require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) {
+            "[OrderStatus]유효하지 않은 주문 상태 입니다."
+        }
     }
 
     fun canTransitionTo(nextState: OrderStatus): Boolean {
