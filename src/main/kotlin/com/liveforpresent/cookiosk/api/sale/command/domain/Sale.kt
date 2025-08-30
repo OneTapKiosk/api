@@ -6,6 +6,8 @@ import com.liveforpresent.cookiosk.api.sale.command.domain.event.SaleCreatedEven
 import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import java.time.Instant
 
 class Sale private constructor (
@@ -24,7 +26,12 @@ class Sale private constructor (
     }
 
     fun validate() {
-        require(totalPrice.value > 0) { "총 가격은 0보다 커야 합니다." }
+        require(totalPrice.value > 0) {
+            throw CustomException(
+                CustomExceptionCode.SALE_TOTAL_PRICE_NON_POSITIVE,
+                "[Sale] 총 가격은 0보다 커야 합니다."
+            )
+        }
     }
 
     val saleItems: MutableList<SaleItem> get() = props.saleItems

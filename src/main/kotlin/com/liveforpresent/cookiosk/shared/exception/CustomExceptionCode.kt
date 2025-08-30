@@ -39,4 +39,12 @@ enum class CustomExceptionCode(
     KIOSK_DEVICE_INVALID_DEVICE(HttpStatus.BAD_REQUEST, "[KioskDevice] 유효하지 않은 키오스크 주변 장치입니다."),
 
     KIOSK_STATUS_INVALID_STATUS(HttpStatus.BAD_REQUEST, "[KioskStatus] 유효하지 않은 키오스크 상태 입니다."),
+
+    // Sale
+    SALE_TOTAL_PRICE_NON_POSITIVE(HttpStatus.BAD_REQUEST, "[Sale] 총 가격은 0보다 커야 합니다."),
+
+    SALE_ITEM_NAME_EMPTY(HttpStatus.BAD_REQUEST, "[SaleItem] 상품명은 필수입니다."),
+    SALE_ITEM_NAME_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "[SaleItem] 상품명은 최대 31자 입니다."),
+    SALE_ITEM_PRICE_NEGATIVE(HttpStatus.BAD_REQUEST, "[SaleItem] 상품 가격은 음수일 수 없습니다."),
+    SALE_ITEM_QUANTITY_NON_POSITIVE(HttpStatus.BAD_REQUEST, "[SaleItem] 상품 수량은 0보다 커야 합니다."),
 }
