@@ -11,6 +11,7 @@ import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItemProp
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import jakarta.transaction.Transactional
@@ -20,6 +21,7 @@ import java.time.Instant
 @Service
 class CreateOrderHandler(
     private val orderCommandRepository: OrderCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: CreateOrderCommand): CreateOrderResDto {
@@ -46,6 +48,8 @@ class CreateOrderHandler(
         val order = Order.create(OrderId(SnowflakeIdUtil.generateId()), orderProps)
 
         orderCommandRepository.save(order)
+
+        eventPublisher.publish(order)
 
         return CreateOrderResDto(order.id.value.toString())
     }

@@ -1,5 +1,9 @@
 package com.liveforpresent.cookiosk.api.inventory.command.domain
 
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryCreatedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryDeletedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryQuantityIncreasedEvent
+import com.liveforpresent.cookiosk.api.inventory.command.domain.event.InventoryUpdatedEvent
 import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
@@ -14,6 +18,7 @@ class Inventory private constructor(
         fun create(id: InventoryId, props: InventoryProps): Inventory {
             val inventory = Inventory(id, props)
             inventory.validate()
+            inventory.addDomainEvent(InventoryCreatedEvent())
 
             return inventory
         }
@@ -30,6 +35,8 @@ class Inventory private constructor(
         ))
 
         updatedInventory.validate()
+
+        updatedInventory.addDomainEvent(InventoryQuantityIncreasedEvent())
 
         return updatedInventory
     }
@@ -65,6 +72,8 @@ class Inventory private constructor(
         ))
         updatedInventory.validate()
 
+        updatedInventory.addDomainEvent(InventoryUpdatedEvent())
+
         return updatedInventory
     }
 
@@ -73,6 +82,8 @@ class Inventory private constructor(
             isDeleted = true,
             deletedAt = Instant.now()
         ))
+
+        updatedInventory.addDomainEvent(InventoryDeletedEvent())
 
         return updatedInventory
     }

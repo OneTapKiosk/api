@@ -19,7 +19,7 @@ class SaleEntity(
     val totalPrice: Int,
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "sale_item_id")
+    @JoinColumn(name = "sale_id")
     val saleItems: MutableList<SaleItemEntity>,
 
     @Column(nullable = false)

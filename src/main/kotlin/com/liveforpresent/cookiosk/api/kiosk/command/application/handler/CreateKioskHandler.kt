@@ -8,13 +8,15 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskStatus
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class CreateKioskHandler(
-    private val kioskCommandRepository: KioskCommandRepository
+    private val kioskCommandRepository: KioskCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: CreateKioskCommand) {
@@ -32,5 +34,7 @@ class CreateKioskHandler(
         val kiosk = Kiosk.create(kioskId, kioskProps)
 
         kioskCommandRepository.save(kiosk)
+
+        eventPublisher.publish(kiosk)
     }
 }

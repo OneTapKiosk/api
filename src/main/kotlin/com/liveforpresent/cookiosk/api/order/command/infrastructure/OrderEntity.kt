@@ -23,7 +23,7 @@ class OrderEntity(
     val totalPrice: Int,
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "order_item_id")
+    @JoinColumn(name = "order_id")
     val orderItems: MutableSet<OrderItemEntity>,
 
     @Column(nullable = false)

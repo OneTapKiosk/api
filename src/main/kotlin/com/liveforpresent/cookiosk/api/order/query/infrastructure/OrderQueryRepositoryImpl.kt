@@ -4,12 +4,14 @@ import com.liveforpresent.cookiosk.api.order.query.domain.OrderDetailModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderItemModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderQueryRepository
+import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 import java.time.Instant
 
 @Repository
 class OrderQueryRepositoryImpl(
-    private val orderQueryJpaRepository: OrderQueryJpaRepository
+    private val orderQueryJpaRepository: OrderQueryJpaRepository,
+    private val em: EntityManager
 ): OrderQueryRepository {
     override fun findByCriteria(
         startAt: Instant?,
@@ -17,7 +19,18 @@ class OrderQueryRepositoryImpl(
         statuses: List<String>?,
         sortBy: String?,
     ): List<OrderModel> {
-        return orderQueryJpaRepository.findByCriteria(startAt, endAt, statuses, sortBy)
+        val orderViews = orderQueryJpaRepository.findByCriteria(startAt, endAt, statuses, sortBy)
+
+        return orderViews.map {
+            OrderModel(
+                id = it.id.toString(),
+                status = it.status,
+                totalPrice = it.totalPrice,
+                kioskId = it.kioskId,
+                createdAt = it.createdAt,
+                updatedAt = it.updatedAt
+            )
+        }
     }
 
     override fun findById(orderId: Long): OrderDetailModel {
@@ -38,5 +51,10 @@ class OrderQueryRepositoryImpl(
             createdAt = orderEntity.createdAt,
             updatedAt = orderEntity.updatedAt,
         )
+    }
+
+    override fun refreshView() {
+        em.createNativeQuery("REFRESH MATERIALIZED VIEW CONCURRENTLY vw_orders")
+            .executeUpdate()
     }
 }

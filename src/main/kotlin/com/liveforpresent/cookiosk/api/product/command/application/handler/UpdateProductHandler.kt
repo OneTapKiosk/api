@@ -3,6 +3,7 @@ package com.liveforpresent.cookiosk.api.product.command.application.handler
 import com.liveforpresent.cookiosk.api.product.command.application.command.UpdateProductCommand
 import com.liveforpresent.cookiosk.api.product.command.domain.ProductCommandRepository
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.Barcode
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.domain.vo.ImageUrl
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import jakarta.transaction.Transactional
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class UpdateProductHandler(
-    private val productCommandRepository: ProductCommandRepository
+    private val productCommandRepository: ProductCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: UpdateProductCommand) {
@@ -27,5 +29,7 @@ class UpdateProductHandler(
         )
 
         productCommandRepository.save(updatedProduct)
+
+        eventPublisher.publish(updatedProduct)
     }
 }

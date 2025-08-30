@@ -3,12 +3,14 @@ package com.liveforpresent.cookiosk.api.inventory.command.application.handler
 import com.liveforpresent.cookiosk.api.inventory.command.application.command.UpdateInventoryCommand
 import com.liveforpresent.cookiosk.api.inventory.command.domain.InventoryCommandRepository
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class UpdateInventoryHandler(
     private val inventoryCommandRepository: InventoryCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: UpdateInventoryCommand) {
@@ -21,5 +23,7 @@ class UpdateInventoryHandler(
         )
 
         inventoryCommandRepository.save(updatedInventory)
+
+        eventPublisher.publish(updatedInventory)
     }
 }
