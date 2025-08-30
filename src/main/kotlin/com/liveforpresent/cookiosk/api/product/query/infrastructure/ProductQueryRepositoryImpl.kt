@@ -2,6 +2,8 @@ package com.liveforpresent.cookiosk.api.product.query.infrastructure
 
 import com.liveforpresent.cookiosk.api.product.query.domain.ProductModel
 import com.liveforpresent.cookiosk.api.product.query.domain.ProductQueryRepository
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 
@@ -33,7 +35,12 @@ class ProductQueryRepositoryImpl(
 
     override fun findById(id: Long): ProductModel {
         val productView = productQueryJpaRepository.findById(id)
-            .orElseThrow { IllegalArgumentException("해당 상품이 존재 하지 않습니다.") }
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.PRODUCT_NOT_FOUND,
+                    "[ProductQueryRepository] ${id}에 해당하는 상품을 찾을 수 없습니다"
+                )
+            }
 
         return ProductModel(
             id = productView.id.toString(),
@@ -49,7 +56,12 @@ class ProductQueryRepositoryImpl(
 
     override fun findByName(name: String): ProductModel {
         val productView = productQueryJpaRepository.findByName(name)
-            .orElseThrow { IllegalArgumentException("해당 상품이 존재 하지 않습니다.") }
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.PRODUCT_NOT_FOUND,
+                    "[ProductQueryRepository] ${name}에 해당하는 상품을 찾을 수 없습니다"
+                )
+            }
 
         return ProductModel(
             id = productView.id.toString(),
@@ -65,7 +77,12 @@ class ProductQueryRepositoryImpl(
 
     override fun findByBarcode(barcode: String): ProductModel {
         val productView = productQueryJpaRepository.findByBarcode(barcode)
-            .orElseThrow { IllegalArgumentException("해당 상품이 존재 하지 않습니다.") }
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.PRODUCT_NOT_FOUND,
+                    "[ProductQueryRepository] 바코드 번호: ${barcode}에 해당하는 상품이 존재하지 않습니다"
+                )
+            }
 
         return ProductModel(
             id = productView.id.toString(),
