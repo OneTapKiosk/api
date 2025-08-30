@@ -8,6 +8,8 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskDevice
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskStatus
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import java.time.Instant
 
 class Kiosk private constructor(
@@ -26,8 +28,18 @@ class Kiosk private constructor(
     }
 
     fun validate() {
-        require(props.name.isNotBlank()) { "[Kiosk] 이름은 필수 입니다." }
-        require(props.name.length < 32) { "[Kiosk] 이름은 최대 32자 입니다." }
+        require(props.name.isNotBlank()) {
+            throw CustomException(
+                CustomExceptionCode.KIOSK_NAME_EMPTY,
+                "[Kiosk] 키오스크명은 필수 입니다."
+            )
+        }
+        require(props.name.length < 32) {
+            throw CustomException(
+                CustomExceptionCode.KIOSK_NAME_LENGTH_EXCEEDED,
+                "[Kiosk] 키오스크명은 최대 31자 입니다."
+            )
+        }
     }
 
     fun update(

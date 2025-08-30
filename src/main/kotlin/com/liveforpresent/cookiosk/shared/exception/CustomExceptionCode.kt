@@ -30,4 +30,13 @@ enum class CustomExceptionCode(
     INVENTORY_INSUFFICIENT_STOCK(HttpStatus.BAD_REQUEST, "[Inventory] 재고가 부족합니다."),
 
     INVENTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "[InventoryRepository] 해당 재고가 존재하지 않습니다."),
+
+    // Kiosk
+    KIOSK_NAME_EMPTY(HttpStatus.BAD_REQUEST, "[Kiosk] 키오스크명은 필수 입니다."),
+    KIOSK_NAME_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "[Kiosk] 키오스크명은 최대 31자 입니다."),
+    KIOSK_NOT_FOUND(HttpStatus.NOT_FOUND, "[KioskRepository] 해당 키오스크가 존재하지 않습니다."),
+
+    KIOSK_DEVICE_INVALID_DEVICE(HttpStatus.BAD_REQUEST, "[KioskDevice] 유효하지 않은 키오스크 주변 장치입니다."),
+
+    KIOSK_STATUS_INVALID_STATUS(HttpStatus.BAD_REQUEST, "[KioskStatus] 유효하지 않은 키오스크 상태 입니다."),
 }

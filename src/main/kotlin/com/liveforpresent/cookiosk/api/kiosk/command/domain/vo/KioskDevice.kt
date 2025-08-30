@@ -1,5 +1,8 @@
 package com.liveforpresent.cookiosk.api.kiosk.command.domain.vo
 
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
+
 class KioskDevice private constructor(val value: String) {
     companion object {
         val BARCODE_READER = KioskDevice("BARCODE_READER")
@@ -17,7 +20,12 @@ class KioskDevice private constructor(val value: String) {
     }
 
     fun validate() {
-        require(allowedDevice.firstOrNull { it.value == value.uppercase() } != null) { "[KioskDevice] 유효하지 않은 키오스크 주변 장치입니다." }
+        require(allowedDevice.firstOrNull { it.value == value.uppercase() } != null) {
+            throw CustomException(
+                CustomExceptionCode.KIOSK_DEVICE_INVALID_DEVICE,
+                "[KioskDevice] 유효하지 않은 키오스크 주변 장치입니다."
+            )
+        }
     }
 
     override fun equals(other: Any?): Boolean = other is KioskDevice && this.value == other.value

@@ -2,6 +2,8 @@ package com.liveforpresent.cookiosk.api.kiosk.query.infrastructure
 
 import com.liveforpresent.cookiosk.api.kiosk.query.domain.KioskModel
 import com.liveforpresent.cookiosk.api.kiosk.query.domain.KioskQueryRepository
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 
@@ -12,7 +14,12 @@ class KioskQueryRepositoryImpl(
 ): KioskQueryRepository {
     override fun findById(id: Long): KioskModel {
         val kioskEntity = kioskQueryJpaRepository.findById(id)
-            .orElseThrow { IllegalArgumentException("해당 키오스크가 존재 하지 않습니다.") }
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.KIOSK_NOT_FOUND,
+                    "[KioskQueryRepository] KioskId: ${id}에 해당하는 키오스크가 존재하지 않습니다."
+                )
+            }
 
         return KioskModel(
             name = kioskEntity.name,
