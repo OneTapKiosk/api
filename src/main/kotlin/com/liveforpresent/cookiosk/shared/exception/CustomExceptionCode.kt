@@ -49,7 +49,7 @@ enum class CustomExceptionCode(
     SALE_ITEM_QUANTITY_NON_POSITIVE(HttpStatus.BAD_REQUEST, "[SaleItem] 상품 수량은 0보다 커야 합니다."),
 
     // Cart
-    CART_TOTAL_PRICE_NON_POSITIVE(HttpStatus.BAD_REQUEST, "[Cart] 총 가격은 0보다 커야 합니다."),
+    CART_TOTAL_PRICE_NEGATIVE(HttpStatus.BAD_REQUEST, "[Cart] 총 가격은 음수일 수 없습니다."),
     CART_NOT_FOUND(HttpStatus.NOT_FOUND, "[CartRepository] 해당 장바구니가 존재하지 않습니다."),
 
     CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "[CartItem] 장바구니 내에 해당 상품이 존재하지 않습니다."),

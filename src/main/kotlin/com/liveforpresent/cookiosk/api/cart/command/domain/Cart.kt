@@ -26,10 +26,10 @@ class Cart private constructor(
     }
 
     fun validate () {
-        require(totalPrice.value > 0) {
+        require(totalPrice.value >= 0) {
             throw CustomException(
-                CustomExceptionCode.CART_TOTAL_PRICE_NON_POSITIVE,
-                "[Cart] 총 가격은 0보다 커야 합니다."
+                CustomExceptionCode.CART_TOTAL_PRICE_NEGATIVE,
+                "[Cart] 총 가격은 음수일 수 없습니다."
             )
         }
     }
