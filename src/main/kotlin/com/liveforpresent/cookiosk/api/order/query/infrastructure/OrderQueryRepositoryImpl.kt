@@ -4,6 +4,8 @@ import com.liveforpresent.cookiosk.api.order.query.domain.OrderDetailModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderItemModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderModel
 import com.liveforpresent.cookiosk.api.order.query.domain.OrderQueryRepository
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 import java.time.Instant
@@ -35,7 +37,12 @@ class OrderQueryRepositoryImpl(
 
     override fun findById(orderId: Long): OrderDetailModel {
         val orderEntity = orderQueryJpaRepository.findById(orderId)
-            .orElseThrow { IllegalArgumentException("해당 주문 내역이 존재하지 않습니다.") }
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.ORDER_NOT_FOUND,
+                    "[OrderQueryRepository] ${orderId}에 해당하는 주문이 존재하지 않습니다."
+                )
+            }
 
         return OrderDetailModel(
             id = orderEntity.id.toString(),

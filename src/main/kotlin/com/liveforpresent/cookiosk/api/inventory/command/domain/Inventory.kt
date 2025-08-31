@@ -8,6 +8,8 @@ import com.liveforpresent.cookiosk.api.inventory.command.domain.vo.InventoryId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import java.time.Instant
 
 class Inventory private constructor(
@@ -25,7 +27,12 @@ class Inventory private constructor(
     }
 
     fun validate() {
-        require(props.quantity >= 0) { "[Inventory] 수량은 음수일 수 없습니다." }
+        require(props.quantity >= 0) {
+            throw CustomException(
+                CustomExceptionCode.INVENTORY_QUANTITY_NEGATIVE,
+                "[Inventory] 수량은 음수일 수 없습니다."
+            )
+        }
     }
 
     fun increaseQuantity(amount: Int): Inventory {
@@ -42,8 +49,18 @@ class Inventory private constructor(
     }
 
     fun decreaseQuantity(amount: Int): Inventory {
-        require(amount > 0) { "[Inventory] 감소 수량은 0보다 커야 합니다." }
-        require(props.quantity >= amount) { "[Inventory] 재고가 부족 합니다." }
+        require(amount > 0) {
+            throw CustomException(
+                CustomExceptionCode.INVENTORY_DECREASE_AMOUNT_NON_POSITIVE,
+                "[Inventory] 감소 수량은 0보다 커야 합니다."
+            )
+        }
+        require(props.quantity >= amount) {
+            throw CustomException(
+                CustomExceptionCode.INVENTORY_INSUFFICIENT_STOCK,
+                "[Inventory] 재고가 부족 합니다."
+            )
+        }
 
         val newQuantity = props.quantity - amount
         val newIsAvailable = !(newQuantity == 0 && props.isAvailable)

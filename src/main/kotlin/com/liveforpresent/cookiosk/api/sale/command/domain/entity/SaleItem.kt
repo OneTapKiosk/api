@@ -3,6 +3,8 @@ package com.liveforpresent.cookiosk.api.sale.command.domain.entity
 import com.liveforpresent.cookiosk.api.sale.command.domain.vo.SaleItemId
 import com.liveforpresent.cookiosk.shared.core.domain.BaseEntity
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 
 class SaleItem(
     id: SaleItemId,
@@ -18,12 +20,32 @@ class SaleItem(
     }
 
     fun validate() {
-        require(props.name.isNotBlank()) { "[SaleItem] 상품명은 필수입니다." }
-        require(props.name.length < 32) { "[SaleItem] 상품명은 최대 31자 입니다."}
+        require(props.name.isNotBlank()) {
+            throw CustomException(
+                CustomExceptionCode.SALE_ITEM_NAME_EMPTY,
+                "[SaleItem] 상품명은 필수입니다."
+            )
+        }
+        require(props.name.length < 32) {
+            throw CustomException(
+                CustomExceptionCode.SALE_ITEM_NAME_LENGTH_EXCEEDED,
+                "[SaleItem] 상품명은 최대 31자 입니다."
+            )
+        }
 
-        require(props.price.value >= 0) { "[SaleItem] 상품 가격은 음수일 수 없습니다." }
+        require(props.price.value >= 0) {
+            throw CustomException(
+                CustomExceptionCode.SALE_ITEM_PRICE_NEGATIVE,
+                "[SaleItem] 상품 가격은 음수일 수 없습니다."
+            )
+        }
 
-        require(props.quantity > 0) { "[SaleItem] 상품 개수는 0보다 커야 합니다." }
+        require(props.quantity > 0) {
+            throw CustomException(
+                CustomExceptionCode.SALE_ITEM_QUANTITY_NON_POSITIVE,
+                "[SaleItem] 상품 수량은 0보다 커야 합니다."
+            )
+        }
     }
 
     val name: String get() = props.name

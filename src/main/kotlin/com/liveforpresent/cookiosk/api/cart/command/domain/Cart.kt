@@ -8,6 +8,8 @@ import com.liveforpresent.cookiosk.api.cart.command.domain.vo.CartItemId
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import java.time.Instant
 
 class Cart private constructor(
@@ -24,7 +26,12 @@ class Cart private constructor(
     }
 
     fun validate () {
-        require(totalPrice.value >= 0) { "[Cart] 총 가격은 음수일 수 없습니다." }
+        require(totalPrice.value > 0) {
+            throw CustomException(
+                CustomExceptionCode.CART_TOTAL_PRICE_NON_POSITIVE,
+                "[Cart] 총 가격은 0보다 커야 합니다."
+            )
+        }
     }
 
     fun addItem(item: CartItem): Cart {
@@ -46,7 +53,12 @@ class Cart private constructor(
 
     fun removeItem(cartItemId: CartItemId): Cart {
         val existingItem = props.cartItems.find { it.id == cartItemId }
-        require(existingItem != null) { "[Cart] 장바구니에 제거할 상품이 없습니다." }
+        require(existingItem != null) {
+            throw CustomException(
+                CustomExceptionCode.CART_ITEM_NOT_FOUND,
+                "[CartItem] 장바구니 내에 해당 상품이 존재하지 않습니다."
+            )
+        }
 
         if (existingItem.quantity > 1) {
             val updatedItem = existingItem.decreaseQuantity()
@@ -54,7 +66,12 @@ class Cart private constructor(
             props.cartItems.add(updatedItem)
         } else {
             val removed = props.cartItems.remove(existingItem)
-            require(removed) { "[Cart] 장바구니에서 상품 제거 실패: ${cartItemId.value}" }
+            require(removed) {
+                throw CustomException(
+                    CustomExceptionCode.CART_ITEM_REMOVE_FAILURE,
+                    "[CartItem] 장바구니에서 상품 제거 실패: ${cartItemId.value}"
+                )
+            }
         }
 
         val updatedCart = calculateTotalPrice()

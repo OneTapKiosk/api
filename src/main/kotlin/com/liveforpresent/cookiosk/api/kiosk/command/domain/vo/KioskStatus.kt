@@ -1,5 +1,8 @@
 package com.liveforpresent.cookiosk.api.kiosk.command.domain.vo
 
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
+
 class KioskStatus private constructor(val value: String) {
     companion object {
         val ONLINE = KioskStatus("ONLINE")
@@ -17,7 +20,12 @@ class KioskStatus private constructor(val value: String) {
     }
 
     fun validate() {
-        require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) { "[KioskStatus] 유효하지 않은 키오스크 상태 입니다." }
+        require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) {
+            throw CustomException(
+                CustomExceptionCode.KIOSK_STATUS_INVALID_STATUS,
+                "[KioskStatus] 유효하지 않은 키오스크 상태 입니다."
+            )
+        }
     }
 
     override fun equals(other: Any?): Boolean = other is KioskStatus && this.value == other.value

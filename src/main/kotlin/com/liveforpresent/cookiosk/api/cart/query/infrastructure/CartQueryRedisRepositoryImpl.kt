@@ -3,6 +3,8 @@ package com.liveforpresent.cookiosk.api.cart.query.infrastructure
 import com.liveforpresent.cookiosk.api.cart.query.domain.CartItemModel
 import com.liveforpresent.cookiosk.api.cart.query.domain.CartModel
 import com.liveforpresent.cookiosk.api.cart.query.domain.CartQueryRedisRepository
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -11,7 +13,12 @@ class CartQueryRedisRepositoryImpl(
 ): CartQueryRedisRepository {
     override fun findById(id: Long): CartModel {
         val cartEntity = cartQueryCrudRepository.findById(id)
-            .orElseThrow { IllegalArgumentException("해당 장바구니가 존재하지 않습니다.") }
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.CART_NOT_FOUND,
+                    "[CartQueryRepository] CartId: ${id}에 해당하는 장바구니가 존재하지 않습니다."
+                )
+            }
 
         val cartModel = CartModel(
             id = cartEntity.id.toString(),

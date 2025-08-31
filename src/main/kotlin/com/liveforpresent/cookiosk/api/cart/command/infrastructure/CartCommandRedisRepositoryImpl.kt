@@ -2,6 +2,8 @@ package com.liveforpresent.cookiosk.api.cart.command.infrastructure
 
 import com.liveforpresent.cookiosk.api.cart.command.domain.Cart
 import com.liveforpresent.cookiosk.api.cart.command.domain.CartCommandRedisRepository
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -17,9 +19,14 @@ class CartCommandRedisRepositoryImpl(
         cartCommandCrudRepository.deleteById(cartId)
     }
 
-    override fun findById(cartId: Long): Cart {
-        val cartRedisEntity = cartCommandCrudRepository.findById(cartId)
-            .orElseThrow { IllegalArgumentException("해당 장바구니가 존재하지 않습니다.") }
+    override fun findById(id: Long): Cart {
+        val cartRedisEntity = cartCommandCrudRepository.findById(id)
+            .orElseThrow {
+                CustomException(
+                    CustomExceptionCode.CART_NOT_FOUND,
+                    "[CartCommandRepository] CartId: ${id}에 해당하는 장바구니가 존재하지 않습니다."
+                )
+            }
 
         return CartRedisEntity.toDomain(cartRedisEntity)
     }
