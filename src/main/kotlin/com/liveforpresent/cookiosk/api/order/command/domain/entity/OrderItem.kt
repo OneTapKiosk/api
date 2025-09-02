@@ -1,6 +1,7 @@
 package com.liveforpresent.cookiosk.api.order.command.domain.entity
 
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.BaseEntity
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.shared.exception.CustomException
@@ -44,4 +45,5 @@ class OrderItem private constructor(
     val name: String get() = props.name
     val price: Money get() = props.price
     val quantity: Int get() = props.quantity
+    val productId: ProductId get() = props.productId
 }
