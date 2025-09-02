@@ -23,7 +23,10 @@ class OrderItemEntity(
     val price: Int,
 
     @Column(nullable = false)
-    val quantity: Int
+    val quantity: Int,
+
+    @Column(nullable = false)
+    val productId: Long
 ) {
     companion object {
         fun toPersistence(orderItem: OrderItem): OrderItemEntity {
@@ -31,7 +34,8 @@ class OrderItemEntity(
                 id = orderItem.id.value,
                 name = orderItem.name,
                 price = orderItem.price.value,
-                quantity = orderItem.quantity
+                quantity = orderItem.quantity,
+                productId = orderItem.pro
             )
         }
 
