@@ -3,6 +3,7 @@ package com.liveforpresent.cookiosk.api.order.command.infrastructure
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItem
 import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItemProps
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -35,7 +36,7 @@ class OrderItemEntity(
                 name = orderItem.name,
                 price = orderItem.price.value,
                 quantity = orderItem.quantity,
-                productId = orderItem.pro
+                productId = orderItem.productId.value
             )
         }
 
@@ -43,7 +44,8 @@ class OrderItemEntity(
             val props = OrderItemProps(
                 name = orderItemEntity.name,
                 price = Money.create(orderItemEntity.price),
-                quantity = orderItemEntity.quantity
+                quantity = orderItemEntity.quantity,
+                productId = ProductId(orderItemEntity.productId),
             )
 
             return OrderItem.create(OrderItemId(orderItemEntity.id), props)
