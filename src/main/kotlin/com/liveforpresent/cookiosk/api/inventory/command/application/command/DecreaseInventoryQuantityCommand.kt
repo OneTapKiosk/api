@@ -1,5 +1,6 @@
 package com.liveforpresent.cookiosk.api.inventory.command.application.command
 
 data class DecreaseInventoryQuantityCommand(
-    val productId: Long
+    val productId: Long,
+    val amount: Int
 )
