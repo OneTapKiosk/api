@@ -13,7 +13,7 @@ class DecreaseInventoryQuantityHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun execute(command: DecreaseInventoryQuantityCommand) {
         val inventory = inventoryCommandRepository.findByProductId(command.productId)
-        val updatedInventory = inventory.decreaseQuantity(1)
+        val updatedInventory = inventory.decreaseQuantity(command.amount)
 
         inventoryCommandRepository.save(updatedInventory)
     }

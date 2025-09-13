@@ -8,7 +8,9 @@ data class CreateOrderReqDto(
     val kioskId: Long
 ) {
     fun toCommand(): CreateOrderCommand {
-        val orderItems = orderItems.map { OrderItemCommand(it.name, it.price, it.quantity) }.toMutableSet()
+        val orderItems = orderItems.map {
+            OrderItemCommand(it.name, it.price, it.quantity, it.productId.toLong())
+        }.toMutableSet()
 
         return CreateOrderCommand(orderItems, kioskId)
     }

@@ -11,6 +11,7 @@ import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItemProp
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
@@ -31,7 +32,8 @@ class CreateOrderHandler(
                 OrderItemProps(
                     name = it.name,
                     price = Money.create(it.price),
-                    quantity = it.quantity
+                    quantity = it.quantity,
+                    productId = ProductId(it.productId)
                 )
             )
         }.toMutableSet()
