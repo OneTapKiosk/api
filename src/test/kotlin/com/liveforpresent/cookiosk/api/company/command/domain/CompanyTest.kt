@@ -10,12 +10,13 @@ class CompanyTest: DescribeSpec({
     describe("Company") {
         val companyId = CompanyId(1L)
         val registrationNumber = RegistrationNumber.create("1234567890")
+        val now = Instant.now()
 
         val companyProps = CompanyProps(
             registrationNumber = registrationNumber,
             phone = "1234567890",
             email = "aaaa@aaaaa.com",
-            createdAt = Instant.now(),
+            createdAt = now,
             isDeleted = false,
             deletedAt = null
         )
@@ -27,7 +28,7 @@ class CompanyTest: DescribeSpec({
             company.registrationNumber shouldBe registrationNumber
             company.email shouldBe companyProps.email
             company.phone shouldBe companyProps.phone
-            company.createdAt shouldBe Instant.now()
+            company.createdAt shouldBe now
             company.isDeleted shouldBe false
             company.deletedAt shouldBe null
         }
