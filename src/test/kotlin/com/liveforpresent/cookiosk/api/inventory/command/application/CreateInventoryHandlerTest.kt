@@ -3,6 +3,7 @@ package com.liveforpresent.cookiosk.api.inventory.command.application
 import com.liveforpresent.cookiosk.api.inventory.command.application.command.CreateInventoryCommand
 import com.liveforpresent.cookiosk.api.inventory.command.application.handler.CreateInventoryHandler
 import com.liveforpresent.cookiosk.api.inventory.command.domain.InventoryCommandRepository
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -10,9 +11,9 @@ import io.mockk.*
 import java.time.Instant
 
 class CreateInventoryHandlerTest : BehaviorSpec({
-
     val inventoryCommandRepository: InventoryCommandRepository = mockk<InventoryCommandRepository>()
-    val createInventoryHandler = CreateInventoryHandler(inventoryCommandRepository)
+    val eventPublisher = mockk<DomainEventPublisher>()
+    val createInventoryHandler = CreateInventoryHandler(inventoryCommandRepository, eventPublisher)
 
     beforeSpec {
         mockkObject(SnowflakeIdUtil)

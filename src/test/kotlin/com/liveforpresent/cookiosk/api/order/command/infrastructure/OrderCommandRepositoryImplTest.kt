@@ -8,6 +8,7 @@ import com.liveforpresent.cookiosk.api.order.command.domain.entity.OrderItemProp
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
+import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -22,11 +23,13 @@ class OrderCommandRepositoryImplTest: BehaviorSpec({
     given("a order") {
         val orderId = OrderId(1L)
         val orderItemId = OrderItemId(1L)
+        val productId = ProductId(1L)
 
         val orderItemProps = OrderItemProps(
             name = "name",
             price = Money.create(1),
-            quantity = 1
+            quantity = 1,
+            productId = productId,
         )
 
         val orderItem = OrderItem.create(orderItemId, orderItemProps)
