@@ -5,9 +5,13 @@ import com.liveforpresent.cookiosk.api.company.command.domain.CompanyProps
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.RegistrationNumber
 import jakarta.persistence.Column
+import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.Instant
 
+@Entity
+@Table(name = "company")
 class CompanyEntity(
     @Id
     val id: Long,
