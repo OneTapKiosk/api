@@ -8,7 +8,6 @@ import com.liveforpresent.cookiosk.shared.exception.CustomException
 import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.ints.exactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.every
@@ -29,6 +28,7 @@ class CompanyCommandRepositoryImplTest: DescribeSpec({
         phone = "1234567890",
         email = "aaaaa@aaaaaaaa.com",
         createdAt = now,
+        updatedAt = now,
         isDeleted = false,
         deletedAt = null
     )
@@ -69,6 +69,28 @@ class CompanyCommandRepositoryImplTest: DescribeSpec({
 
                 exception.code shouldBe CustomExceptionCode.COMPANY_NOT_FOUND
                 exception.code.message shouldContain "사업체는 존재하지 않습니다."
+            }
+        }
+    }
+
+    describe("findByRegistrationNumber") {
+        context("registrationNumber에 해당하는 company가 존재하는 경우") {
+            it("company entity를 찾아 company로 변환 후 반환한다.") {
+                every { companyCommandJpaRepository.findByRegistrationNumber(any<String>()) } returns companyEntity
+
+                val result = companyCommandRepositoryImpl.findByRegistrationNumber(registrationNumber.value)
+
+                result shouldBe company
+            }
+        }
+
+        context("registrationNumber에 해당하는 company가 존재하지 않는 경우") {
+            it("null을 반환한다.") {
+                every { companyCommandJpaRepository.findByRegistrationNumber("101010110") } returns null
+
+                val result = companyCommandRepositoryImpl.findByRegistrationNumber("101010110")
+
+                result shouldBe null
             }
         }
     }

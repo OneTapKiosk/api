@@ -17,6 +17,7 @@ class CompanyTest: DescribeSpec({
             phone = "1234567890",
             email = "aaaa@aaaaa.com",
             createdAt = now,
+            updatedAt = now,
             isDeleted = false,
             deletedAt = null
         )

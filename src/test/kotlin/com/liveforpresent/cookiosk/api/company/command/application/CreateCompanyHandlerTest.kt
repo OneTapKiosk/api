@@ -53,6 +53,7 @@ class CreateCompanyHandlerTest: DescribeSpec({
                 phone = command.phone,
                 email = command.email,
                 createdAt = Instant.now(),
+                updatedAt = Instant.now(),
                 isDeleted = false,
                 deletedAt = null
             ))
