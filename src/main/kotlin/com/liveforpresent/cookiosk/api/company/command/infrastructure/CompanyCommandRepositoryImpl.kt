@@ -26,4 +26,10 @@ class CompanyCommandRepositoryImpl(
 
         return CompanyEntity.toDomain(companyEntity)
     }
+
+    override fun findByRegistrationNumber(registrationNumber: String): Company? {
+        val companyEntity = companyCommandJpaRepository.findByRegistrationNumber(registrationNumber) ?: return null
+
+        return CompanyEntity.toDomain(companyEntity)
+    }
 }
