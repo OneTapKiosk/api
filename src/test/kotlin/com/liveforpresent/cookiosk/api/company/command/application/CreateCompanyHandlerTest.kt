@@ -27,6 +27,7 @@ class CreateCompanyHandlerTest: DescribeSpec({
         )
 
         it("Company 도메인 객체를 생성 후, DB에 저장한다.") {
+            every { companyCommandRepository.findByRegistrationNumber(command.registrationNumber) } returns null
             val capturedCompany = slot<Company>()
             every { companyCommandRepository.save(capture(capturedCompany)) } answers { capturedCompany.captured }
 
