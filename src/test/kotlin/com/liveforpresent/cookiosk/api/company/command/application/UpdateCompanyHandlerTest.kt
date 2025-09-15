@@ -1,0 +1,117 @@
+package com.liveforpresent.cookiosk.api.company.command.application
+
+import com.liveforpresent.cookiosk.api.company.command.application.command.UpdateCompanyCommand
+import com.liveforpresent.cookiosk.api.company.command.application.handler.UpdateCompanyHandler
+import com.liveforpresent.cookiosk.api.company.command.domain.Company
+import com.liveforpresent.cookiosk.api.company.command.domain.CompanyCommandRepository
+import com.liveforpresent.cookiosk.api.company.command.domain.CompanyProps
+import com.liveforpresent.cookiosk.api.company.command.domain.vo.CompanyId
+import com.liveforpresent.cookiosk.api.company.command.domain.vo.RegistrationNumber
+import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.mockk.*
+import java.time.Instant
+
+class UpdateCompanyHandlerTest: DescribeSpec({
+    lateinit var companyCommandRepository: CompanyCommandRepository
+    lateinit var updateCompanyHandler: UpdateCompanyHandler
+
+    beforeEach {
+        companyCommandRepository = mockk()
+        updateCompanyHandler = UpdateCompanyHandler(companyCommandRepository)
+    }
+    mockkObject(SnowflakeIdUtil)
+
+    describe("UpdateCompanyHandler") {
+        it("모든 필드가 바뀌었을 때 수정에 성공해야 한다.") {
+            val companyId = CompanyId(1L)
+            val oldRegistrationNumber = RegistrationNumber.create("1234567890")
+            val oldEmail = "old@example.com"
+            val oldPhone = "111-222-3333"
+            val createdAt = Instant.now()
+
+            val newRegistrationNumber = "9876543210"
+            val newEmail = "new@example.com"
+            val newPhone = "444-555-6666"
+
+            val existingCompany = Company.create(
+                id = companyId, CompanyProps(
+                    registrationNumber = oldRegistrationNumber,
+                    email = oldEmail,
+                    phone = oldPhone,
+                    createdAt = createdAt,
+                    updatedAt = createdAt,
+                    isDeleted = false,
+                    deletedAt = null,
+                )
+            )
+
+            val command = UpdateCompanyCommand(
+                id = companyId.value,
+                newRegistrationNumber = newRegistrationNumber,
+                newEmail = newEmail,
+                newPhone = newPhone
+            )
+
+            every { companyCommandRepository.findOne(any<Long>()) } returns existingCompany
+            val updatedCompanySlot = slot<Company>()
+            every { companyCommandRepository.save(capture(updatedCompanySlot)) } answers { updatedCompanySlot.captured }
+
+            updateCompanyHandler.execute(command)
+
+            verify(exactly = 1) { companyCommandRepository.findOne(any<Long>())  }
+            verify(exactly = 1) { companyCommandRepository.save(any<Company>()) }
+
+            updatedCompanySlot.captured shouldNotBe null
+            updatedCompanySlot.captured.registrationNumber.value shouldBe newRegistrationNumber
+            updatedCompanySlot.captured.email shouldBe newEmail
+            updatedCompanySlot.captured.phone shouldBe newPhone
+        }
+
+        it("일부 필드가 바뀌었을 때 수정에 성공해야 한다.") {
+            val companyId = CompanyId(1L)
+            val oldRegistrationNumber = RegistrationNumber.create("1234567890")
+            val oldEmail = "old@example.com"
+            val oldPhone = "111-222-3333"
+            val createdAt = Instant.now()
+
+            val newRegistrationNumber = "9876543210"
+            val newEmail = "new@example.com"
+
+            val existingCompany = Company.create(
+                id = companyId, CompanyProps(
+                    registrationNumber = oldRegistrationNumber,
+                    email = oldEmail,
+                    phone = oldPhone,
+                    createdAt = createdAt,
+                    updatedAt = createdAt,
+                    isDeleted = false,
+                    deletedAt = null,
+                )
+            )
+
+            val command = UpdateCompanyCommand(
+                id = companyId.value,
+                newRegistrationNumber = newRegistrationNumber,
+                newEmail = newEmail,
+                newPhone = oldPhone
+            )
+
+            every { companyCommandRepository.findOne(any<Long>()) } returns existingCompany
+            val updatedCompanySlot = slot<Company>()
+            every { companyCommandRepository.save(capture(updatedCompanySlot)) } answers { updatedCompanySlot.captured }
+
+            updateCompanyHandler.execute(command)
+
+            verify(exactly = 1) { companyCommandRepository.findOne(any<Long>())  }
+            verify(exactly = 1) { companyCommandRepository.save(any<Company>()) }
+
+            updatedCompanySlot.captured shouldNotBe null
+            updatedCompanySlot.captured.registrationNumber.value shouldBe newRegistrationNumber
+            updatedCompanySlot.captured.email shouldBe newEmail
+            updatedCompanySlot.captured.phone shouldBe oldPhone
+        }
+    }
+})
