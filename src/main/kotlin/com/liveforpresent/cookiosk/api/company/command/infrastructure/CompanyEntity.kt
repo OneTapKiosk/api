@@ -16,7 +16,7 @@ class CompanyEntity(
     @Id
     val id: Long,
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     val registrationNumber: String,
 
     @Column(nullable = false)
@@ -27,6 +27,9 @@ class CompanyEntity(
 
     @Column(nullable = false)
     val createdAt: Instant,
+
+    @Column(nullable = false)
+    val updatedAt: Instant,
 
     @Column(nullable = false)
     val isDeleted: Boolean,
@@ -42,6 +45,7 @@ class CompanyEntity(
                 phone = company.phone,
                 email = company.email,
                 createdAt = company.createdAt,
+                updatedAt = company.updatedAt,
                 isDeleted = company.isDeleted,
                 deletedAt = company.deletedAt
             )
@@ -53,6 +57,7 @@ class CompanyEntity(
                 phone = companyEntity.phone,
                 email = companyEntity.email,
                 createdAt = companyEntity.createdAt,
+                updatedAt = companyEntity.updatedAt,
                 isDeleted = companyEntity.isDeleted,
                 deletedAt = companyEntity.deletedAt
             )

@@ -8,6 +8,7 @@ data class CompanyProps(
     val phone: String,
     val email: String,
     val createdAt: Instant,
+    val updatedAt: Instant,
     val isDeleted: Boolean,
     val deletedAt: Instant?
 )
