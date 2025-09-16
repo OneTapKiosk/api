@@ -70,6 +70,8 @@ class Company private constructor(
             deletedAt = null
         ))
 
+        updatedCompany.addDomainEvent(CompanyCreatedEvent())
+
         return updatedCompany
     }
 
