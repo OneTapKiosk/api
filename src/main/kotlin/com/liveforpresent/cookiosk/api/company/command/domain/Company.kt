@@ -1,5 +1,8 @@
 package com.liveforpresent.cookiosk.api.company.command.domain
 
+import com.liveforpresent.cookiosk.api.company.command.domain.event.CompanyCreatedEvent
+import com.liveforpresent.cookiosk.api.company.command.domain.event.CompanyDeletedEvent
+import com.liveforpresent.cookiosk.api.company.command.domain.event.CompanyUpdatedEvent
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.RegistrationNumber
 import com.liveforpresent.cookiosk.shared.core.domain.AggregateRoot
@@ -16,6 +19,8 @@ class Company private constructor(
             val company = Company(id, props)
             company.validate()
 
+            company.addDomainEvent(CompanyCreatedEvent())
+
             return company
         }
     }
@@ -29,10 +34,50 @@ class Company private constructor(
         ) }
     }
 
+    fun update(
+        newRegistrationNumber: RegistrationNumber,
+        newPhone: String,
+        newEmail: String
+    ): Company {
+        val updatedCompany = Company(id, props.copy(
+            registrationNumber = newRegistrationNumber,
+            phone = newPhone,
+            email = newEmail,
+            updatedAt = Instant.now()
+        ))
+
+        updatedCompany.validate()
+
+        updatedCompany.addDomainEvent(CompanyUpdatedEvent())
+
+        return updatedCompany
+    }
+
+    fun delete(): Company {
+        val updatedCompany = Company(id, props.copy(
+            isDeleted = true,
+            deletedAt = Instant.now()
+        ))
+
+        updatedCompany.addDomainEvent(CompanyDeletedEvent())
+
+        return updatedCompany
+    }
+
+    fun unDelete(): Company {
+        val updatedCompany = Company(id, props.copy(
+            isDeleted = false,
+            deletedAt = null
+        ))
+
+        return updatedCompany
+    }
+
     val registrationNumber: RegistrationNumber get() = props.registrationNumber
     val phone: String get() = props.phone
     val email: String get() = props.email
     val createdAt: Instant get() = props.createdAt
+    val updatedAt: Instant get() = props.updatedAt
     val isDeleted: Boolean get() = props.isDeleted
     val deletedAt: Instant? get() = props.deletedAt
 }
