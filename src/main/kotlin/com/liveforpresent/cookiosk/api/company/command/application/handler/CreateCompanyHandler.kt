@@ -7,6 +7,7 @@ import com.liveforpresent.cookiosk.api.company.command.domain.CompanyCommandRepo
 import com.liveforpresent.cookiosk.api.company.command.domain.CompanyProps
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.RegistrationNumber
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import com.liveforpresent.cookiosk.shared.exception.CustomException
 import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
@@ -16,7 +17,8 @@ import java.time.Instant
 
 @Service
 class CreateCompanyHandler(
-    private val companyCommandRepository: CompanyCommandRepository
+    private val companyCommandRepository: CompanyCommandRepository,
+    private val eventPublisher: DomainEventPublisher
 ) {
     @Transactional
     fun execute(command: CreateCompanyCommand): CreateCompanyResDto {
@@ -29,6 +31,8 @@ class CreateCompanyHandler(
                 val updatedCompany = existingCompany.unDelete()
 
                 companyCommandRepository.save(updatedCompany)
+
+                eventPublisher.publish(updatedCompany)
 
                 return CreateCompanyResDto(existingCompany.id.value.toString())
             }
@@ -49,6 +53,8 @@ class CreateCompanyHandler(
         val company = Company.create(companyId, companyProps)
 
         companyCommandRepository.save(company)
+
+        eventPublisher.publish(company)
 
         return CreateCompanyResDto(companyId.value.toString())
     }
