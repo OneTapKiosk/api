@@ -9,7 +9,7 @@ import com.liveforpresent.cookiosk.api.company.command.application.handler.Delet
 import com.liveforpresent.cookiosk.api.company.command.application.handler.UpdateCompanyHandler
 import com.liveforpresent.cookiosk.api.company.command.presentation.dto.request.CreateCompanyReqDto
 import com.liveforpresent.cookiosk.api.company.command.presentation.dto.request.DeleteCompanyReqDto
-import com.liveforpresent.cookiosk.api.company.command.presentation.dto.request.UpdateCompnayReqDto
+import com.liveforpresent.cookiosk.api.company.command.presentation.dto.request.UpdateCompanyReqDto
 import com.liveforpresent.cookiosk.shared.core.presentation.BaseApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -48,7 +48,7 @@ class CompanyCommandController(
     }
 
     @PatchMapping("/{id}")
-    fun updateCompany(@PathVariable id: String, @RequestBody dto: UpdateCompnayReqDto): ResponseEntity<BaseApiResponse<Unit>> {
+    fun updateCompany(@PathVariable id: String, @RequestBody dto: UpdateCompanyReqDto): ResponseEntity<BaseApiResponse<Unit>> {
         val command = UpdateCompanyCommand(
             id = id.toLong(),
             newRegistrationNumber = dto.registrationNumber,
