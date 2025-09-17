@@ -7,6 +7,7 @@ import com.liveforpresent.cookiosk.api.company.command.domain.CompanyCommandRepo
 import com.liveforpresent.cookiosk.api.company.command.domain.CompanyProps
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.RegistrationNumber
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -15,7 +16,8 @@ import java.time.Instant
 
 class CreateCompanyHandlerTest: DescribeSpec({
     val companyCommandRepository = mockk<CompanyCommandRepository>()
-    val createCompanyHandler = CreateCompanyHandler(companyCommandRepository)
+    val eventPublisher = mockk<DomainEventPublisher>()
+    val createCompanyHandler = CreateCompanyHandler(companyCommandRepository, eventPublisher)
     mockkObject(SnowflakeIdUtil)
 
     describe("CreateCompanyHandler") {
@@ -30,10 +32,12 @@ class CreateCompanyHandlerTest: DescribeSpec({
             every { companyCommandRepository.findByRegistrationNumber(command.registrationNumber) } returns null
             val capturedCompany = slot<Company>()
             every { companyCommandRepository.save(capture(capturedCompany)) } answers { capturedCompany.captured }
+            every { eventPublisher.publish(any<Company>()) } just Runs
 
             val result = createCompanyHandler.execute(command)
 
             verify(exactly = 1) { companyCommandRepository.save(any<Company>()) }
+            verify(exactly = 1) { eventPublisher.publish(any<Company>()) }
 
             val createdCompany = capturedCompany.captured
 

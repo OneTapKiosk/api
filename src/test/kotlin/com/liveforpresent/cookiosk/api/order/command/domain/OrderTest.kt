@@ -8,6 +8,8 @@ import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderItemId
 import com.liveforpresent.cookiosk.api.order.command.domain.vo.OrderStatus
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
 import com.liveforpresent.cookiosk.shared.core.domain.vo.Money
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldBeOneOf
@@ -78,9 +80,9 @@ class OrderTest : DescribeSpec({
 
                 order.orderStatus shouldNotBe OrderStatus.CREATED
 
-                shouldThrow<IllegalArgumentException> {
-                    order.processPayment()
-                }.message shouldContain "상태에서는 결제 단계로 넘어갈 수 없습니다."
+                val exception = shouldThrow<CustomException> { order.processPayment() }
+                exception.code shouldBe CustomExceptionCode.ORDER_INVALID_STATE
+                exception.code.message shouldContain "주문 상태가 유효하지 않습니다."
             }
         }
 
@@ -109,9 +111,10 @@ class OrderTest : DescribeSpec({
 
                 order.orderStatus shouldNotBe OrderStatus.PENDING
 
-                shouldThrow<IllegalArgumentException> {
-                    order.finishAsSuccess()
-                }.message shouldContain "상태에서는 주문 성공이 불가능합니다."
+                val exception = shouldThrow<CustomException> { order.finishAsSuccess() }
+
+                exception.code shouldBe CustomExceptionCode.ORDER_INVALID_STATE
+                exception.code.message shouldContain "주문 상태가 유효하지 않습니다."
             }
         }
 

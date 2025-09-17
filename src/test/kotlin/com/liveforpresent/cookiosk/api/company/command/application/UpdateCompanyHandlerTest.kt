@@ -7,6 +7,7 @@ import com.liveforpresent.cookiosk.api.company.command.domain.CompanyCommandRepo
 import com.liveforpresent.cookiosk.api.company.command.domain.CompanyProps
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.CompanyId
 import com.liveforpresent.cookiosk.api.company.command.domain.vo.RegistrationNumber
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -17,10 +18,12 @@ import java.time.Instant
 class UpdateCompanyHandlerTest: DescribeSpec({
     lateinit var companyCommandRepository: CompanyCommandRepository
     lateinit var updateCompanyHandler: UpdateCompanyHandler
+    lateinit var eventPublisher: DomainEventPublisher
 
     beforeEach {
         companyCommandRepository = mockk()
-        updateCompanyHandler = UpdateCompanyHandler(companyCommandRepository)
+        eventPublisher = mockk()
+        updateCompanyHandler = UpdateCompanyHandler(companyCommandRepository, eventPublisher)
     }
     mockkObject(SnowflakeIdUtil)
 
@@ -58,11 +61,13 @@ class UpdateCompanyHandlerTest: DescribeSpec({
             every { companyCommandRepository.findOne(any<Long>()) } returns existingCompany
             val updatedCompanySlot = slot<Company>()
             every { companyCommandRepository.save(capture(updatedCompanySlot)) } answers { updatedCompanySlot.captured }
+            every { eventPublisher.publish(any<Company>()) } just Runs
 
             updateCompanyHandler.execute(command)
 
             verify(exactly = 1) { companyCommandRepository.findOne(any<Long>())  }
             verify(exactly = 1) { companyCommandRepository.save(any<Company>()) }
+            verify(exactly = 1) { eventPublisher.publish(any<Company>()) }
 
             updatedCompanySlot.captured shouldNotBe null
             updatedCompanySlot.captured.registrationNumber.value shouldBe newRegistrationNumber
@@ -102,11 +107,13 @@ class UpdateCompanyHandlerTest: DescribeSpec({
             every { companyCommandRepository.findOne(any<Long>()) } returns existingCompany
             val updatedCompanySlot = slot<Company>()
             every { companyCommandRepository.save(capture(updatedCompanySlot)) } answers { updatedCompanySlot.captured }
+            every { eventPublisher.publish(any<Company>()) } just Runs
 
             updateCompanyHandler.execute(command)
 
             verify(exactly = 1) { companyCommandRepository.findOne(any<Long>())  }
             verify(exactly = 1) { companyCommandRepository.save(any<Company>()) }
+            verify(exactly = 1) { eventPublisher.publish(any<Company>()) }
 
             updatedCompanySlot.captured shouldNotBe null
             updatedCompanySlot.captured.registrationNumber.value shouldBe newRegistrationNumber

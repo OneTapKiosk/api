@@ -6,9 +6,12 @@ import com.liveforpresent.cookiosk.api.cart.command.infrastructure.CartItemEntit
 import com.liveforpresent.cookiosk.api.cart.command.infrastructure.CartRedisEntity
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.vo.KioskId
 import com.liveforpresent.cookiosk.api.product.command.domain.vo.ProductId
+import com.liveforpresent.cookiosk.shared.exception.CustomException
+import com.liveforpresent.cookiosk.shared.exception.CustomExceptionCode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -73,10 +76,13 @@ class CartQueryRepositoryImplTest: DescribeSpec({
 
             every { cartCrudRepository.findById(invalidId) } returns Optional.empty()
 
-            it("IllegalArgumentException을 발생시켜야 한다") {
-                shouldThrow<IllegalArgumentException> {
+            it("CustomException을 발생시켜야 한다") {
+                val exception = shouldThrow<CustomException> {
                     cartQueryRedisRepositoryImpl.findById(invalidId)
-                }.message shouldBe "해당 장바구니가 존재하지 않습니다."
+                }
+
+                exception.code shouldBe CustomExceptionCode.CART_NOT_FOUND
+                exception.code.message shouldContain "장바구니가 존재하지 않습니다."
             }
 
             it("findById가 한 번 호출되어야 한다") {
