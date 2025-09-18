@@ -4,6 +4,7 @@ import com.liveforpresent.cookiosk.api.kiosk.command.domain.event.KioskCreatedEv
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.event.KioskDeletedEvent
 import com.liveforpresent.cookiosk.api.kiosk.command.domain.event.KioskUpdatedEvent
 import com.liveforpresent.cookiosk.api.kiosk.query.application.handler.RefreshKioskViewHandler
+import com.liveforpresent.cookiosk.shared.core.domain.vo.DomainEvent
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionalEventListener
 
@@ -11,18 +12,14 @@ import org.springframework.transaction.event.TransactionalEventListener
 class RefreshKioskViewListener(
     private val refreshKioskViewHandler: RefreshKioskViewHandler
 ) {
-    @TransactionalEventListener
-    fun handleCreate(event: KioskCreatedEvent) {
-        refreshKioskViewHandler.execute()
-    }
-
-    @TransactionalEventListener
-    fun handleUpdate(event: KioskUpdatedEvent) {
-        refreshKioskViewHandler.execute()
-    }
-
-    @TransactionalEventListener
-    fun handleDelete(event: KioskDeletedEvent) {
+    @TransactionalEventListener(
+        classes = [
+            KioskCreatedEvent::class,
+            KioskUpdatedEvent::class,
+            KioskDeletedEvent::class,
+        ]
+    )
+    fun handle(event: DomainEvent) {
         refreshKioskViewHandler.execute()
     }
 }
