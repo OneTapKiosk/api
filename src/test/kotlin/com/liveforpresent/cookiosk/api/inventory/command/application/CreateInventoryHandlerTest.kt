@@ -2,7 +2,9 @@ package com.liveforpresent.cookiosk.api.inventory.command.application
 
 import com.liveforpresent.cookiosk.api.inventory.command.application.command.CreateInventoryCommand
 import com.liveforpresent.cookiosk.api.inventory.command.application.handler.CreateInventoryHandler
+import com.liveforpresent.cookiosk.api.inventory.command.domain.Inventory
 import com.liveforpresent.cookiosk.api.inventory.command.domain.InventoryCommandRepository
+import com.liveforpresent.cookiosk.shared.core.domain.DomainEventPublisher
 import com.liveforpresent.cookiosk.shared.core.infrastructure.util.SnowflakeIdUtil
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -10,9 +12,9 @@ import io.mockk.*
 import java.time.Instant
 
 class CreateInventoryHandlerTest : BehaviorSpec({
-
     val inventoryCommandRepository: InventoryCommandRepository = mockk<InventoryCommandRepository>()
-    val createInventoryHandler = CreateInventoryHandler(inventoryCommandRepository)
+    val eventPublisher = mockk<DomainEventPublisher>()
+    val createInventoryHandler = CreateInventoryHandler(inventoryCommandRepository, eventPublisher)
 
     beforeSpec {
         mockkObject(SnowflakeIdUtil)
@@ -40,6 +42,7 @@ class CreateInventoryHandlerTest : BehaviorSpec({
 
         When("핸들러의 execute 메서드를 실행하면") {
             every { inventoryCommandRepository.save(any()) } returnsArgument 0
+            every { eventPublisher.publish(any<Inventory>()) } just Runs
             createInventoryHandler.execute(command)
 
             Then("InventoryCommandRepository의 save 메서드가 호출되어야 한다") {
@@ -54,6 +57,7 @@ class CreateInventoryHandlerTest : BehaviorSpec({
                         }
                     )
                 }
+                verify(exactly = 1) { eventPublisher.publish(any<Inventory>()) }
             }
         }
     }
