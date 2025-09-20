@@ -1,4 +1,4 @@
-package com.liveforpresent.onetapkiosk.ordering
+package com.liveforpresent.onetapkiosk.common
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
