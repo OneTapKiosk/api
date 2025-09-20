@@ -1,0 +1,2 @@
+package com.liveforpresent.onetapkiosk.common.core.application
+interface BaseUseCaseInput
