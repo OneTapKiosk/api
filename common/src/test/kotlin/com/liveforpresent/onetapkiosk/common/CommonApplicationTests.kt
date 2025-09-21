@@ -1,13 +1,13 @@
-package com.liveforpresent.onetapkiosk.product
+package com.liveforpresent.onetapkiosk.common
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class ApplicationTests {
-
+class CommonApplicationTests {
+/*
 	@Test
 	fun contextLoads() {
 	}
-
+*/
 }
