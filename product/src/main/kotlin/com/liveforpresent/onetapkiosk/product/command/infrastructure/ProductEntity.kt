@@ -30,6 +30,12 @@ class ProductEntity(
     val imageUrl: String,
 
     @Column(nullable = false)
+    val isAvailable: Boolean,
+
+    @Column(nullable = false)
+    val quantity: Int,
+
+    @Column(nullable = false)
     val displayOrder: Int,
 
     @Column(nullable = false)
@@ -45,6 +51,12 @@ class ProductEntity(
     val kioskId: Long,
 
     @Column(nullable = false)
+    val createdAt: Instant,
+
+    @Column(nullable = false)
+    val updatedAt: Instant,
+
+    @Column(nullable = false)
     val isDeleted: Boolean,
 
     @Column(nullable = true)
@@ -57,11 +69,15 @@ class ProductEntity(
                 name = product.name,
                 price = product.price.value,
                 imageUrl = product.imageUrl.value,
+                isAvailable = product.isAvailable,
+                quantity = product.quantity,
                 displayOrder = product.displayOrder,
                 barcode = product.barcode.value,
                 description = product.description,
                 categoryId = product.categoryId,
                 kioskId = product.kioskId.value,
+                createdAt = product.createdAt,
+                updatedAt = product.updatedAt,
                 isDeleted = product.isDeleted,
                 deletedAt = product.deletedAt,
             )
@@ -72,11 +88,15 @@ class ProductEntity(
                 name = productEntity.name,
                 price = Money.create(productEntity.price),
                 imageUrl = ImageUrl.create(productEntity.imageUrl),
+                isAvailable = productEntity.isAvailable,
+                quantity = productEntity.quantity,
                 displayOrder = productEntity.displayOrder,
                 barcode = Barcode.create(productEntity.barcode),
                 description = productEntity.description,
                 categoryId = productEntity.categoryId,
                 kioskId = KioskId(productEntity.kioskId),
+                createdAt = productEntity.createdAt,
+                updatedAt = productEntity.updatedAt,
                 isDeleted = productEntity.isDeleted,
                 deletedAt = productEntity.deletedAt,
             )

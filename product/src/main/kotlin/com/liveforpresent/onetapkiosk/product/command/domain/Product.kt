@@ -24,10 +24,10 @@ class Product private constructor(
 
             product.addDomainEvent(
                 ProductCreatedEvent(
-                productId = product.productId.value,
-                quantity = 0,
-                kioskId = product.kioskId.value
-            )
+                    productId = product.productId.value,
+                    quantity = 0,
+                    kioskId = product.kioskId.value
+                )
             )
 
             return product
@@ -47,6 +47,11 @@ class Product private constructor(
         require(props.price.value >= 0) { throw CustomException(
                 CustomExceptionCode.PRODUCT_PRICE_NEGATIVE,
                 "[Product] 상품 가격은 음수일 수 없습니다."
+        ) }
+
+        require(props.quantity >= 0) { throw CustomException(
+                CustomExceptionCode.INVENTORY_QUANTITY_NEGATIVE,
+                "[Product] 수량은 음수일 수 없습니다."
         ) }
 
         require(props.displayOrder >= 0) { throw CustomException(
@@ -105,11 +110,15 @@ class Product private constructor(
     val name: String get() = props.name
     val price: Money get() = props.price
     val imageUrl: ImageUrl get() = props.imageUrl
+    val isAvailable: Boolean get() = props.isAvailable
+    val quantity: Int get() = props.quantity
     val displayOrder: Int get() = props.displayOrder
     val barcode: Barcode get() = props.barcode
     val description: String? get() = props.description
     val categoryId: Long? get() = props.categoryId
     val kioskId: KioskId get() = props.kioskId
+    val createdAt: Instant get() = props.createdAt
+    val updatedAt: Instant get() = props.updatedAt
     val isDeleted: Boolean get() = props.isDeleted
     val deletedAt: Instant? get() = props.deletedAt
 }

@@ -10,11 +10,15 @@ data class ProductProps (
     val name: String,
     val price: Money,
     val imageUrl: ImageUrl,
+    val isAvailable: Boolean,
+    val quantity: Int,
     val displayOrder: Int,
     val barcode: Barcode,
     val description: String?,
     val categoryId: Long?,
     val kioskId: KioskId,
+    val createdAt: Instant = Instant.now(),
+    val updatedAt: Instant = Instant.now(),
     val isDeleted: Boolean = false,
     val deletedAt: Instant? = null
 )
