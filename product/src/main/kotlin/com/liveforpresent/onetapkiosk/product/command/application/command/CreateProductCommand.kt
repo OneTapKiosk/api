@@ -4,6 +4,8 @@ data class CreateProductCommand (
     val name: String,
     val price: Int,
     val imageUrl: String,
+    val isAvailable: Boolean,
+    val quantity: Int,
     val displayOrder: Int,
     val barcode: String,
     val description: String?,

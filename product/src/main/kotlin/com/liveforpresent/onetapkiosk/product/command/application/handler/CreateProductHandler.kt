@@ -27,6 +27,8 @@ class CreateProductHandler(
             name = command.name,
             price = Money.create(command.price),
             imageUrl = ImageUrl.create(command.imageUrl),
+            isAvailable = command.isAvailable,
+            quantity = command.quantity,
             displayOrder = command.displayOrder,
             barcode = Barcode.create(command.barcode),
             description = command.description,
