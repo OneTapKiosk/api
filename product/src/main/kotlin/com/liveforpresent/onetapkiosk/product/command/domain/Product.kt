@@ -97,6 +97,49 @@ class Product private constructor(
         return updatedProduct
     }
 
+    fun increaseQuantity(amount: Int): Product {
+        val updatedInventory = Product(id, props.copy(
+            quantity = props.quantity + amount,
+            updatedAt = Instant.now()
+        ))
+
+        updatedInventory.validate()
+
+        updatedInventory.addDomainEvent(ProductQuantityIncreasedEvent())
+
+        return updatedInventory
+    }
+
+    fun decreaseQuantity(amount: Int): Product {
+        require(amount > 0) {
+            throw CustomException(
+                CustomExceptionCode.PRODUCT_DECREASE_AMOUNT_NON_POSITIVE,
+                "[Product] 감소 수량은 0보다 커야 합니다."
+            )
+        }
+        require(props.quantity >= amount) {
+            throw CustomException(
+                CustomExceptionCode.PRODUCT_INSUFFICIENT_STOCK,
+                "[Product] 재고가 부족 합니다."
+            )
+        }
+
+        val newQuantity = props.quantity - amount
+        val newIsAvailable = !(newQuantity == 0 && props.isAvailable)
+
+        val updatedProduct = Product(id, props.copy(
+            isAvailable = newIsAvailable,
+            quantity = newQuantity,
+            updatedAt = Instant.now()
+        ))
+
+        updatedProduct.validate()
+
+        updatedProduct.addDomainEvent(ProductQuantityDecreasedEvent())
+
+        return updatedProduct
+    }
+
     fun delete(id: ProductId): Product {
         val updatedProduct = Product(
             id, props.copy(
