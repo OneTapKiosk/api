@@ -1,8 +1,5 @@
 package com.liveforpresent.onetapkiosk.product.command.domain
 
-import com.liveforpresent.onetapkiosk.product.command.domain.event.ProductCreatedEvent
-import com.liveforpresent.onetapkiosk.product.command.domain.event.ProductDeletedEvent
-import com.liveforpresent.onetapkiosk.product.command.domain.event.ProductUpdatedEvent
 import com.liveforpresent.onetapkiosk.common.core.domain.AggregateRoot
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.Barcode
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.ImageUrl
@@ -11,6 +8,7 @@ import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.KioskId
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.ProductId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
 import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.product.command.domain.event.*
 import java.time.Instant
 
 class Product private constructor(
@@ -45,13 +43,13 @@ class Product private constructor(
         ) }
 
         require(props.price.value >= 0) { throw CustomException(
-                CustomExceptionCode.PRODUCT_PRICE_NEGATIVE,
-                "[Product] 상품 가격은 음수일 수 없습니다."
+            CustomExceptionCode.PRODUCT_PRICE_NEGATIVE,
+            "[Product] 상품 가격은 음수일 수 없습니다."
         ) }
 
         require(props.quantity >= 0) { throw CustomException(
-                CustomExceptionCode.INVENTORY_QUANTITY_NEGATIVE,
-                "[Product] 수량은 음수일 수 없습니다."
+            CustomExceptionCode.PRODUCT_QUANTITY_NEGATIVE,
+            "[Product] 수량은 음수일 수 없습니다."
         ) }
 
         require(props.displayOrder >= 0) { throw CustomException(
@@ -69,6 +67,8 @@ class Product private constructor(
         newName: String = this.name,
         newPrice: Money = this.price,
         newImageUrl: ImageUrl = this.imageUrl,
+        newIsAvailable: Boolean = this.isAvailable,
+        newQuantity: Int = this.quantity,
         newDisplayOrder: Int = this.displayOrder,
         newBarcode: Barcode = this.barcode,
         newDescription: String? = this.description,
@@ -80,11 +80,14 @@ class Product private constructor(
                 name = newName,
                 price = newPrice,
                 imageUrl = newImageUrl,
+                isAvailable = newIsAvailable,
+                quantity = newQuantity,
                 displayOrder = newDisplayOrder,
                 barcode = newBarcode,
                 description = newDescription,
                 categoryId = newCategoryId,
                 kioskId = newKioskId,
+                updatedAt = Instant.now()
             )
         )
         updatedProduct.validate()

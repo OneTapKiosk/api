@@ -22,6 +22,8 @@ class UpdateProductHandler(
             newName = command.name ?: product.name,
             newPrice = command.price?.let { Money.create(it) } ?: product.price,
             newImageUrl = command.imageUrl?. let { ImageUrl.create(it) } ?: product.imageUrl,
+            newIsAvailable = command.isAvailable ?: product.isAvailable,
+            newQuantity = command.quantity ?: product.quantity,
             newDisplayOrder = command.displayOrder ?: product.displayOrder,
             newBarcode = command.barcode?.let { Barcode.create(it) } ?: product.barcode,
             newDescription = command.description ?: product.description,
