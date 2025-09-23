@@ -26,10 +26,14 @@ class ProductQueryRepositoryImpl(
             name = it.name,
             price = it.price,
             imageUrl = it.imageUrl,
+            isAvailable = it.isAvailable,
+            quantity = it.quantity,
             displayOrder = it.displayOrder,
             barcode = it.barcode,
             description = it.description,
-            categoryId = it.categoryId.toString()
+            categoryId = it.categoryId.toString(),
+            createdAt = it.createdAt,
+            updatedAt = it.updatedAt
         ) }
     }
 
@@ -47,10 +51,14 @@ class ProductQueryRepositoryImpl(
             name = productView.name,
             price = productView.price,
             imageUrl = productView.imageUrl,
+            isAvailable = productView.isAvailable,
+            quantity = productView.quantity,
             displayOrder = productView.displayOrder,
             barcode = productView.barcode,
             description = productView.description,
-            categoryId = productView.categoryId.toString()
+            categoryId = productView.categoryId.toString(),
+            createdAt = productView.createdAt,
+            updatedAt = productView.updatedAt
         )
     }
 
@@ -68,10 +76,14 @@ class ProductQueryRepositoryImpl(
             name = productView.name,
             price = productView.price,
             imageUrl = productView.imageUrl,
+            isAvailable = productView.isAvailable,
+            quantity = productView.quantity,
             displayOrder = productView.displayOrder,
             barcode = productView.barcode,
             description = productView.description,
-            categoryId = productView.categoryId.toString()
+            categoryId = productView.categoryId.toString(),
+            createdAt = productView.createdAt,
+            updatedAt = productView.updatedAt
         )
     }
 
@@ -89,10 +101,14 @@ class ProductQueryRepositoryImpl(
             name = productView.name,
             price = productView.price,
             imageUrl = productView.imageUrl,
+            isAvailable = productView.isAvailable,
+            quantity = productView.quantity,
             displayOrder = productView.displayOrder,
             barcode = productView.barcode,
             description = productView.description,
-            categoryId = productView.categoryId.toString()
+            categoryId = productView.categoryId.toString(),
+            createdAt = productView.createdAt,
+            updatedAt = productView.updatedAt
         )
     }
 
