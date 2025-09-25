@@ -10,8 +10,8 @@ import com.liveforpresent.onetapkiosk.common.core.domain.vo.Money
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.KioskId
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.OrderId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.ordering.order.command.domain.vo.OrderStatus
+import com.liveforpresent.onetapkiosk.ordering.shared.exception.OrderExceptionCode
 import java.time.Instant
 
 class Order private constructor(
@@ -40,7 +40,7 @@ class Order private constructor(
     fun processPayment(): Order {
         require(props.status.canTransitionTo(OrderStatus.PENDING)) {
             throw CustomException(
-                CustomExceptionCode.ORDER_INVALID_STATE,
+                OrderExceptionCode.ORDER_INVALID_STATE,
                 "[Order] ${props.status.value} 상태에서는 결제 단계로 넘어갈 수 없습니다."
             )
         }
@@ -58,7 +58,7 @@ class Order private constructor(
     fun finishAsSuccess(): Order {
         require(props.status.canTransitionTo(OrderStatus.SUCCESS)) {
             throw CustomException(
-                CustomExceptionCode.ORDER_INVALID_STATE,
+                OrderExceptionCode.ORDER_INVALID_STATE,
                 "[Order] ${props.status.value} 상태에서는 주문 성공이 불가능합니다."
             )
         }
@@ -82,7 +82,7 @@ class Order private constructor(
     fun finishAsReject(): Order {
         require(props.status.canTransitionTo(OrderStatus.REJECTED)) {
             throw CustomException(
-                CustomExceptionCode.ORDER_INVALID_STATE,
+                OrderExceptionCode.ORDER_INVALID_STATE,
                 "[Order] ${props.status.value} 상태에서는 주문 실패가 불가능합니다."
             )
         }
@@ -100,7 +100,7 @@ class Order private constructor(
     fun finishAsCancel(): Order {
         require(props.status.canTransitionTo(OrderStatus.CANCELLED)) {
             throw CustomException(
-                CustomExceptionCode.ORDER_INVALID_STATE,
+                OrderExceptionCode.ORDER_INVALID_STATE,
                 "[Order] ${props.status.value} 상태에서는 주문 취소가 불가능합니다."
             )
         }

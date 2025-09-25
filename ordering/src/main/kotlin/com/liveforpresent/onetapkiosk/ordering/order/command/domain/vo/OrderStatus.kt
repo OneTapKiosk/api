@@ -1,5 +1,8 @@
 package com.liveforpresent.onetapkiosk.ordering.order.command.domain.vo
 
+import com.liveforpresent.onetapkiosk.common.exception.CustomException
+import com.liveforpresent.onetapkiosk.ordering.shared.exception.OrderExceptionCode
+
 class OrderStatus(val value: String) {
     companion object {
         val CREATED = OrderStatus("CREATED")
@@ -21,7 +24,10 @@ class OrderStatus(val value: String) {
 
     fun validate() {
         require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) {
-            "[OrderStatus]유효하지 않은 주문 상태 입니다."
+            throw CustomException(
+                OrderExceptionCode.ORDER_STATUS_INVALID_STATE,
+                "[OrderStatus] 주문 상태가 유효하지 않습니다."
+            )
         }
     }
 

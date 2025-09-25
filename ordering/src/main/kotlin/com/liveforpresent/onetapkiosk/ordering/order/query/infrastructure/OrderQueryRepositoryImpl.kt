@@ -1,11 +1,11 @@
 package com.liveforpresent.onetapkiosk.ordering.order.query.infrastructure
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.ordering.order.query.domain.OrderDetailModel
 import com.liveforpresent.onetapkiosk.ordering.order.query.domain.OrderItemModel
 import com.liveforpresent.onetapkiosk.ordering.order.query.domain.OrderModel
 import com.liveforpresent.onetapkiosk.ordering.order.query.domain.OrderQueryRepository
+import com.liveforpresent.onetapkiosk.ordering.shared.exception.OrderExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 import java.time.Instant
@@ -39,7 +39,7 @@ class OrderQueryRepositoryImpl(
         val orderEntity = orderQueryJpaRepository.findById(orderId)
             .orElseThrow {
                 CustomException(
-                    CustomExceptionCode.ORDER_NOT_FOUND,
+                    OrderExceptionCode.ORDER_NOT_FOUND,
                     "[OrderQueryRepository] ${orderId}에 해당하는 주문이 존재하지 않습니다."
                 )
             }
