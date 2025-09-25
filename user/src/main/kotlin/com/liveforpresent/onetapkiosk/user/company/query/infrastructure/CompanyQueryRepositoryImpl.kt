@@ -1,9 +1,9 @@
 package com.liveforpresent.onetapkiosk.user.company.query.infrastructure
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.user.company.query.domain.CompanyModel
 import com.liveforpresent.onetapkiosk.user.company.query.domain.CompanyQueryRepository
+import com.liveforpresent.onetapkiosk.user.shared.exception.CompanyExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 
@@ -15,7 +15,7 @@ class CompanyQueryRepositoryImpl(
     override fun findById(id: Long): CompanyModel {
         val companyView = companyQueryJpaRepository.findById(id)
             .orElseThrow { CustomException(
-                CustomExceptionCode.COMPANY_NOT_FOUND,
+                CompanyExceptionCode.COMPANY_NOT_FOUND,
                 "[CompanyQueryRepository] CompanyId: ${id}에 해당하는 사업체는 존재하지 않습니다."
             ) }
 

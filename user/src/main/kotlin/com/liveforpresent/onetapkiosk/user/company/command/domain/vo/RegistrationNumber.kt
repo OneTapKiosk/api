@@ -1,7 +1,7 @@
 package com.liveforpresent.onetapkiosk.user.company.command.domain.vo
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.user.shared.exception.CompanyExceptionCode
 
 class RegistrationNumber private constructor(val value: String) {
     companion object {
@@ -15,11 +15,11 @@ class RegistrationNumber private constructor(val value: String) {
 
     fun validate() {
         require(value.isNotEmpty()) { throw CustomException(
-            CustomExceptionCode.COMPANY_REGISTRATION_NUMBER_EMPTY,
+            CompanyExceptionCode.COMPANY_REGISTRATION_NUMBER_EMPTY,
             "[CompanyRegistrationNumber] 사업자등록번호는 필수 입니다."
         ) }
         require(value.length == 10) { throw CustomException(
-            CustomExceptionCode.COMPANY_INVALID_REGISTRATION_NUMBER,
+            CompanyExceptionCode.COMPANY_INVALID_REGISTRATION_NUMBER,
             "[CompanyRegistrationNumber] 유효하지 않은 사업자등록번호 형식입니다."
         )}
     }

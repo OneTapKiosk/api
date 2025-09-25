@@ -10,7 +10,7 @@ import com.liveforpresent.onetapkiosk.common.core.domain.DomainEventPublisher
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.CompanyId
 import com.liveforpresent.onetapkiosk.common.core.infrastructure.util.SnowflakeIdUtil
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.user.shared.exception.CompanyExceptionCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -25,7 +25,7 @@ class CreateCompanyHandler(
         val existingCompany = companyCommandRepository.findByRegistrationNumber(command.registrationNumber)
         if (existingCompany != null) {
             if (!existingCompany.isDeleted) throw CustomException(
-                CustomExceptionCode.COMPANY_ALREADY_EXISTS,
+                CompanyExceptionCode.COMPANY_ALREADY_EXISTS,
                 "[Company] RegistrationNumber: ${command.registrationNumber}에 해당하는 사업자 등록번호로 이미 가입된 사업체가 있습니다."
             ) else {
                 val updatedCompany = existingCompany.unDelete()

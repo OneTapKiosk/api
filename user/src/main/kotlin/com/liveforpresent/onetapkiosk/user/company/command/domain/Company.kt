@@ -3,11 +3,11 @@ package com.liveforpresent.onetapkiosk.user.company.command.domain
 import com.liveforpresent.onetapkiosk.common.core.domain.AggregateRoot
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.CompanyId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.user.company.command.domain.event.CompanyCreatedEvent
 import com.liveforpresent.onetapkiosk.user.company.command.domain.event.CompanyDeletedEvent
 import com.liveforpresent.onetapkiosk.user.company.command.domain.event.CompanyUpdatedEvent
 import com.liveforpresent.onetapkiosk.user.company.command.domain.vo.RegistrationNumber
+import com.liveforpresent.onetapkiosk.user.shared.exception.CompanyExceptionCode
 import java.time.Instant
 
 class Company private constructor(
@@ -29,7 +29,7 @@ class Company private constructor(
         val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$".toRegex()
 
         require(emailRegex.matches(props.email)) { throw CustomException(
-            CustomExceptionCode.COMPANY_INVALID_EMAIL,
+            CompanyExceptionCode.COMPANY_INVALID_EMAIL,
             "[Company] 유효하지 않은 이메일 입니다."
         ) }
     }
