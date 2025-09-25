@@ -4,7 +4,7 @@ import com.liveforpresent.onetapkiosk.ordering.cart.query.domain.CartItemModel
 import com.liveforpresent.onetapkiosk.ordering.cart.query.domain.CartModel
 import com.liveforpresent.onetapkiosk.ordering.cart.query.domain.CartQueryRedisRepository
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.ordering.shared.exception.CartExceptionCode
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -15,7 +15,7 @@ class CartQueryRedisRepositoryImpl(
         val cartEntity = cartQueryCrudRepository.findById(id)
             .orElseThrow {
                 CustomException(
-                    CustomExceptionCode.CART_NOT_FOUND,
+                    CartExceptionCode.CART_NOT_FOUND,
                     "[CartQueryRepository] CartId: ${id}에 해당하는 장바구니가 존재하지 않습니다."
                 )
             }

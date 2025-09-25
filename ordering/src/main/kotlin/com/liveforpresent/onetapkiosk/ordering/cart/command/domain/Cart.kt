@@ -5,11 +5,11 @@ import com.liveforpresent.onetapkiosk.common.core.domain.vo.Money
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.CartId
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.KioskId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.ordering.cart.command.domain.entity.CartItem
 import com.liveforpresent.onetapkiosk.ordering.cart.command.domain.event.CartItemAddedEvent
 import com.liveforpresent.onetapkiosk.ordering.cart.command.domain.event.CartItemRemovedEvent
 import com.liveforpresent.onetapkiosk.ordering.cart.command.domain.vo.CartItemId
+import com.liveforpresent.onetapkiosk.ordering.shared.exception.CartExceptionCode
 import java.time.Instant
 
 class Cart private constructor(
@@ -28,7 +28,7 @@ class Cart private constructor(
     fun validate () {
         require(totalPrice.value >= 0) {
             throw CustomException(
-                CustomExceptionCode.CART_TOTAL_PRICE_NEGATIVE,
+                CartExceptionCode.CART_TOTAL_PRICE_NEGATIVE,
                 "[Cart] 총 가격은 음수일 수 없습니다."
             )
         }
@@ -55,7 +55,7 @@ class Cart private constructor(
         val existingItem = props.cartItems.find { it.id == cartItemId }
         require(existingItem != null) {
             throw CustomException(
-                CustomExceptionCode.CART_ITEM_NOT_FOUND,
+                CartExceptionCode.CART_ITEM_NOT_FOUND,
                 "[CartItem] 장바구니 내에 해당 상품이 존재하지 않습니다."
             )
         }
@@ -68,7 +68,7 @@ class Cart private constructor(
             val removed = props.cartItems.remove(existingItem)
             require(removed) {
                 throw CustomException(
-                    CustomExceptionCode.CART_ITEM_REMOVE_FAILURE,
+                    CartExceptionCode.CART_ITEM_REMOVE_FAILURE,
                     "[CartItem] 장바구니에서 상품 제거 실패: ${cartItemId.value}"
                 )
             }
