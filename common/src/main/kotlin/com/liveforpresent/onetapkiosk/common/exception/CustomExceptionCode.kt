@@ -12,6 +12,9 @@ enum class CustomExceptionCode(
     PRODUCT_PRICE_NEGATIVE(HttpStatus.BAD_REQUEST, "[Product] 상품 가격은 음수일 수 없습니다."),
     PRODUCT_DISPLAY_ORDER_NEGATIVE(HttpStatus.BAD_REQUEST, "[Product] 상품 정렬 순서는 음수일 수 없습니다."),
     PRODUCT_DESCRIPTION_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "[Product] 상품 설명은 최대 127자 입니다."),
+    PRODUCT_QUANTITY_NEGATIVE(HttpStatus.BAD_REQUEST, "[Product] 재고 수량은 음수일 수 없습니다."),
+    PRODUCT_DECREASE_AMOUNT_NON_POSITIVE(HttpStatus.BAD_REQUEST, "[Product] 감소 수량은 0보다 커야 합니다."),
+    PRODUCT_INSUFFICIENT_STOCK(HttpStatus.BAD_REQUEST, "[Product] 재고가 부족합니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "[ProductRepository] 해당 상품을 찾을 수 없습니다"),
 
     // Order
@@ -25,10 +28,6 @@ enum class CustomExceptionCode(
     ORDER_STATUS_INVALID_STATE(HttpStatus.BAD_REQUEST, "[OrderStatus] 주문 상태가 유효하지 않습니다."),
 
     // Inventory
-    INVENTORY_QUANTITY_NEGATIVE(HttpStatus.BAD_REQUEST, "[Inventory] 재고 수량은 음수일 수 없습니다."),
-    INVENTORY_DECREASE_AMOUNT_NON_POSITIVE(HttpStatus.BAD_REQUEST, "[Inventory] 감소 수량은 0보다 커야 합니다."),
-    INVENTORY_INSUFFICIENT_STOCK(HttpStatus.BAD_REQUEST, "[Inventory] 재고가 부족합니다."),
-
     INVENTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "[InventoryRepository] 해당 재고가 존재하지 않습니다."),
 
     // Kiosk
