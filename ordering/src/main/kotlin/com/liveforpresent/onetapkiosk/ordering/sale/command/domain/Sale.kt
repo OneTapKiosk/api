@@ -7,7 +7,7 @@ import com.liveforpresent.onetapkiosk.common.core.domain.vo.Money
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.KioskId
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.SaleId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.ordering.shared.exception.SaleExceptionCode
 import java.time.Instant
 
 class Sale private constructor (
@@ -28,7 +28,7 @@ class Sale private constructor (
     fun validate() {
         require(totalPrice.value > 0) {
             throw CustomException(
-                CustomExceptionCode.SALE_TOTAL_PRICE_NON_POSITIVE,
+                SaleExceptionCode.SALE_TOTAL_PRICE_NON_POSITIVE,
                 "[Sale] 총 가격은 0보다 커야 합니다."
             )
         }
