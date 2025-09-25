@@ -1,7 +1,7 @@
 package com.liveforpresent.onetapkiosk.user.kiosk.command.domain.vo
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.user.shared.exception.KioskExceptionCode
 
 class KioskStatus private constructor(val value: String) {
     companion object {
@@ -22,7 +22,7 @@ class KioskStatus private constructor(val value: String) {
     fun validate() {
         require(allowedStatus.firstOrNull { it.value == value.uppercase() } != null) {
             throw CustomException(
-                CustomExceptionCode.KIOSK_STATUS_INVALID_STATUS,
+                KioskExceptionCode.KIOSK_STATUS_INVALID_STATUS,
                 "[KioskStatus] 유효하지 않은 키오스크 상태 입니다."
             )
         }

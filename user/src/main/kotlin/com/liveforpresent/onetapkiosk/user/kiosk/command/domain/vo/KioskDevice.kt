@@ -1,7 +1,7 @@
 package com.liveforpresent.onetapkiosk.user.kiosk.command.domain.vo
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.user.shared.exception.KioskExceptionCode
 
 class KioskDevice private constructor(val value: String) {
     companion object {
@@ -22,7 +22,7 @@ class KioskDevice private constructor(val value: String) {
     fun validate() {
         require(allowedDevice.firstOrNull { it.value == value.uppercase() } != null) {
             throw CustomException(
-                CustomExceptionCode.KIOSK_DEVICE_INVALID_DEVICE,
+                KioskExceptionCode.KIOSK_DEVICE_INVALID_DEVICE,
                 "[KioskDevice] 유효하지 않은 키오스크 주변 장치입니다."
             )
         }

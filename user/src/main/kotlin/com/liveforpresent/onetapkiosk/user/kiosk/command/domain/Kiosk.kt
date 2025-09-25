@@ -9,7 +9,7 @@ import com.liveforpresent.onetapkiosk.common.core.domain.AggregateRoot
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.CompanyId
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.KioskId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.user.shared.exception.KioskExceptionCode
 import java.time.Instant
 
 class Kiosk private constructor(
@@ -30,13 +30,13 @@ class Kiosk private constructor(
     fun validate() {
         require(props.name.isNotBlank()) {
             throw CustomException(
-                CustomExceptionCode.KIOSK_NAME_EMPTY,
+                KioskExceptionCode.KIOSK_NAME_EMPTY,
                 "[Kiosk] 키오스크명은 필수 입니다."
             )
         }
         require(props.name.length < 32) {
             throw CustomException(
-                CustomExceptionCode.KIOSK_NAME_LENGTH_EXCEEDED,
+                KioskExceptionCode.KIOSK_NAME_LENGTH_EXCEEDED,
                 "[Kiosk] 키오스크명은 최대 31자 입니다."
             )
         }

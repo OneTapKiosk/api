@@ -3,7 +3,7 @@ package com.liveforpresent.onetapkiosk.user.kiosk.query.infrastructure
 import com.liveforpresent.onetapkiosk.user.kiosk.query.domain.KioskModel
 import com.liveforpresent.onetapkiosk.user.kiosk.query.domain.KioskQueryRepository
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
+import com.liveforpresent.onetapkiosk.user.shared.exception.KioskExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 
@@ -16,7 +16,7 @@ class KioskQueryRepositoryImpl(
         val kioskEntity = kioskQueryJpaRepository.findById(id)
             .orElseThrow {
                 CustomException(
-                    CustomExceptionCode.KIOSK_NOT_FOUND,
+                    KioskExceptionCode.KIOSK_NOT_FOUND,
                     "[KioskQueryRepository] KioskId: ${id}에 해당하는 키오스크가 존재하지 않습니다."
                 )
             }
