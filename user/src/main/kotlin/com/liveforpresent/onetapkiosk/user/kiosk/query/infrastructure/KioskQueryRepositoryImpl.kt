@@ -1,0 +1,51 @@
+package com.liveforpresent.onetapkiosk.user.kiosk.query.infrastructure
+
+import com.liveforpresent.onetapkiosk.user.kiosk.query.domain.KioskModel
+import com.liveforpresent.onetapkiosk.user.kiosk.query.domain.KioskQueryRepository
+import com.liveforpresent.onetapkiosk.common.exception.CustomException
+import com.liveforpresent.onetapkiosk.user.shared.exception.KioskExceptionCode
+import jakarta.persistence.EntityManager
+import org.springframework.stereotype.Repository
+
+@Repository
+class KioskQueryRepositoryImpl(
+    private val kioskQueryJpaRepository: KioskQueryJpaRepository,
+    private val em: EntityManager
+): KioskQueryRepository {
+    override fun findById(id: Long): KioskModel {
+        val kioskEntity = kioskQueryJpaRepository.findById(id)
+            .orElseThrow {
+                CustomException(
+                    KioskExceptionCode.KIOSK_NOT_FOUND,
+                    "[KioskQueryRepository] KioskId: ${id}에 해당하는 키오스크가 존재하지 않습니다."
+                )
+            }
+
+        return KioskModel(
+            name = kioskEntity.name,
+            location = kioskEntity.location,
+            status = kioskEntity.status,
+            version = kioskEntity.version,
+            devices = kioskEntity.devices,
+            companyId = kioskEntity.companyId.toString(),
+        )
+    }
+
+    override fun findByCompanyId(companyId: Long): List<KioskModel> {
+        val kioskEntities = kioskQueryJpaRepository.findByCompanyId(companyId)
+
+        return kioskEntities.map { KioskModel(
+            name = it.name,
+            location = it.location,
+            status = it.status,
+            version = it.version,
+            devices = it.devices,
+            companyId = it.companyId.toString()
+        ) }
+    }
+
+    override fun refreshView() {
+        em.createNativeQuery("REFRESH MATERIALIZED VIEW CONCURRENTLY vw_kiosk")
+            .executeUpdate()
+    }
+}
