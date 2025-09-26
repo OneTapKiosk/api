@@ -7,8 +7,8 @@ import com.liveforpresent.onetapkiosk.common.core.domain.vo.Money
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.KioskId
 import com.liveforpresent.onetapkiosk.common.core.domain.vo.identifiers.ProductId
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.product.command.domain.event.*
+import com.liveforpresent.onetapkiosk.product.shared.exception.ProductExceptionCode
 import java.time.Instant
 
 class Product private constructor(
@@ -34,31 +34,31 @@ class Product private constructor(
 
     fun validate() {
         require(props.name.isNotBlank()) { throw CustomException(
-            CustomExceptionCode.PRODUCT_NAME_EMPTY,
+            ProductExceptionCode.PRODUCT_NAME_EMPTY,
             "[Product] 상품명은 필수입니다."
         ) }
         require(props.name.length < 32) { throw CustomException(
-            CustomExceptionCode.PRODUCT_NAME_LENGTH_EXCEEDED,
+            ProductExceptionCode.PRODUCT_NAME_LENGTH_EXCEEDED,
             "[Product] 상품명은 최대 31자 입니다."
         ) }
 
         require(props.price.value >= 0) { throw CustomException(
-            CustomExceptionCode.PRODUCT_PRICE_NEGATIVE,
+            ProductExceptionCode.PRODUCT_PRICE_NEGATIVE,
             "[Product] 상품 가격은 음수일 수 없습니다."
         ) }
 
         require(props.quantity >= 0) { throw CustomException(
-            CustomExceptionCode.PRODUCT_QUANTITY_NEGATIVE,
+            ProductExceptionCode.PRODUCT_QUANTITY_NEGATIVE,
             "[Product] 수량은 음수일 수 없습니다."
         ) }
 
         require(props.displayOrder >= 0) { throw CustomException(
-            CustomExceptionCode.PRODUCT_DISPLAY_ORDER_NEGATIVE,
+            ProductExceptionCode.PRODUCT_DISPLAY_ORDER_NEGATIVE,
             "[Product] 상품 정렬 순서는 음수일 수 없습니다."
         ) }
 
         require((props.description?.length ?: 0) < 128) { throw CustomException(
-            CustomExceptionCode.PRODUCT_DESCRIPTION_LENGTH_EXCEEDED,
+            ProductExceptionCode.PRODUCT_DESCRIPTION_LENGTH_EXCEEDED,
             "[Product] 상품 설명은 최대 127자 입니다."
         ) }
     }
@@ -113,13 +113,13 @@ class Product private constructor(
     fun decreaseQuantity(amount: Int): Product {
         require(amount > 0) {
             throw CustomException(
-                CustomExceptionCode.PRODUCT_DECREASE_AMOUNT_NON_POSITIVE,
+                ProductExceptionCode.PRODUCT_DECREASE_AMOUNT_NON_POSITIVE,
                 "[Product] 감소 수량은 0보다 커야 합니다."
             )
         }
         require(props.quantity >= amount) {
             throw CustomException(
-                CustomExceptionCode.PRODUCT_INSUFFICIENT_STOCK,
+                ProductExceptionCode.PRODUCT_INSUFFICIENT_STOCK,
                 "[Product] 재고가 부족 합니다."
             )
         }

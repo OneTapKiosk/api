@@ -1,9 +1,9 @@
 package com.liveforpresent.onetapkiosk.product.query.infrastructure
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.product.query.domain.ProductModel
 import com.liveforpresent.onetapkiosk.product.query.domain.ProductQueryRepository
+import com.liveforpresent.onetapkiosk.product.shared.exception.ProductExceptionCode
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 
@@ -41,7 +41,7 @@ class ProductQueryRepositoryImpl(
         val productView = productQueryJpaRepository.findById(id)
             .orElseThrow {
                 CustomException(
-                    CustomExceptionCode.PRODUCT_NOT_FOUND,
+                    ProductExceptionCode.PRODUCT_NOT_FOUND,
                     "[ProductQueryRepository] ${id}에 해당하는 상품을 찾을 수 없습니다"
                 )
             }
@@ -66,7 +66,7 @@ class ProductQueryRepositoryImpl(
         val productView = productQueryJpaRepository.findByName(name)
             .orElseThrow {
                 CustomException(
-                    CustomExceptionCode.PRODUCT_NOT_FOUND,
+                    ProductExceptionCode.PRODUCT_NOT_FOUND,
                     "[ProductQueryRepository] ${name}에 해당하는 상품을 찾을 수 없습니다"
                 )
             }
@@ -91,7 +91,7 @@ class ProductQueryRepositoryImpl(
         val productView = productQueryJpaRepository.findByBarcode(barcode)
             .orElseThrow {
                 CustomException(
-                    CustomExceptionCode.PRODUCT_NOT_FOUND,
+                    ProductExceptionCode.PRODUCT_NOT_FOUND,
                     "[ProductQueryRepository] 바코드 번호: ${barcode}에 해당하는 상품이 존재하지 않습니다"
                 )
             }

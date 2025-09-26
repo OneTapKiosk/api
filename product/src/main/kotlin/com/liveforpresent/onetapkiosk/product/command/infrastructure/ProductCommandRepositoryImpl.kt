@@ -1,9 +1,9 @@
 package com.liveforpresent.onetapkiosk.product.command.infrastructure
 
 import com.liveforpresent.onetapkiosk.common.exception.CustomException
-import com.liveforpresent.onetapkiosk.common.exception.CustomExceptionCode
 import com.liveforpresent.onetapkiosk.product.command.domain.Product
 import com.liveforpresent.onetapkiosk.product.command.domain.ProductCommandRepository
+import com.liveforpresent.onetapkiosk.product.shared.exception.ProductExceptionCode
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -20,7 +20,7 @@ class ProductCommandRepositoryImpl(
     override fun findOne(id: Long): Product {
         val productEntity = productCommandJpaRepository.findById(id).orElseThrow {
             CustomException(
-                CustomExceptionCode.PRODUCT_NOT_FOUND,
+                ProductExceptionCode.PRODUCT_NOT_FOUND,
                 "[ProductCommandRepository] ${id}에 해당하는 상품을 찾을 수 없습니다"
             )
         }
