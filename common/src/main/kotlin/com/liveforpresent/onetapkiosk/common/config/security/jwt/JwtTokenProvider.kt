@@ -4,6 +4,9 @@ import com.liveforpresent.onetapkiosk.common.exception.CustomException
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import org.slf4j.LoggerFactory
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service
 import java.util.Date
 import java.util.IllegalFormatException
@@ -71,6 +74,25 @@ class JwtTokenProvider(
                 }
             }
         }
+    }
+
+    fun getAuthentication(token: String): Authentication {
+        val claims = extractClaims(token, JwtTokenType.ACCESS_TOKEN)
+        val username = claims.subject
+
+        val companyId = claims["companyId"] as? String ?: throw CustomException(
+            JwtExceptionCode.JWT_COMPANY_ID_EMPTY,
+            "[Jwt] Claim내의 CompanyId는 필수 입니다."
+        )
+        val kioskId = claims["kioskId"] as? String ?: throw CustomException(
+            JwtExceptionCode.JWT_KIOSK_ID_EMPTY,
+            "[Jwt] Claim내의 kioskId는 필수 입니다."
+        )
+        val authorities: Collection<GrantedAuthority> = emptyList()
+
+        val principal = KioskPrincipal(username, companyId, kioskId, authorities)
+
+        return UsernamePasswordAuthenticationToken(principal, null, null)
     }
 
     private fun createToken(subject: String, claims: Map<String, Any>, jwtTokenType: JwtTokenType): String {
