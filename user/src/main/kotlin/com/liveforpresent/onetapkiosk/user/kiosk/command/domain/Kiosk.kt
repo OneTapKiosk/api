@@ -76,7 +76,7 @@ class Kiosk private constructor(
             )
         )
 
-        updatedKiosk.addDomainEvent(KioskDeletedEvent())
+        updatedKiosk.addDomainEvent(KioskDeletedEvent(id.value))
 
         return updatedKiosk
     }
